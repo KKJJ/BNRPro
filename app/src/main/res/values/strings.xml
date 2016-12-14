@@ -21,4 +21,9 @@
     <string name="content_description_test">这是为视力障碍的用户提供方便，在为其设置该文字属性值后，如果用户设备的可访问性选项作了相应设置，那么在用户点击图形按钮时，设备便会读出属性值的内容。</string>
 
 
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">SHOW ANSWER</string>
+    <string name="cheat_button">CHEAT!</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
+
 </resources>
