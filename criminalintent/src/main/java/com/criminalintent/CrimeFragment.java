@@ -14,24 +14,43 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 /**
  * Created by Kuang on 2016/12/13.
  */
 
 public class CrimeFragment extends Fragment {
 
+    private static final String TAG = "--CrimeFragment";
+    private static final String ARG_CRIME_ID = "crime_id";
+
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
 
+    /**
+     * @param crimeId
+     * @return
+     */
+    public static CrimeFragment newInstance(UUID crimeId) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_CRIME_ID, crimeId);
+
+        CrimeFragment crimeFragment = new CrimeFragment();
+        crimeFragment.setArguments(args);
+
+        return crimeFragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCrime = new Crime();
+        UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
+        mCrime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
     }
-
-    private static final String TAG = "--CrimeFragment";
 
     @Nullable
     @Override
@@ -66,6 +85,9 @@ public class CrimeFragment extends Fragment {
                 mCrime.setSolved(isChecked);
             }
         });
+
+        mTitleField.setText(mCrime.getTitle());
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
 
         return v;
     }
