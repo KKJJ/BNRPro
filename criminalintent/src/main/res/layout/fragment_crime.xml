@@ -27,11 +27,39 @@
         android:text="@string/crime_details_label"/>
 
     <Button
-        android:id="@+id/crime_date"
+        android:id="@+id/crime_date_time_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/crime_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:text="Select date"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/crime_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:text="Select time"
+            android:textAllCaps="false"/>
+
+
+    </LinearLayout>
 
     <CheckBox
         android:id="@+id/crime_solved"
@@ -40,5 +68,15 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:text="@string/crime_solved_label"/>
+
+    <Button
+        android:id="@+id/crime_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="40dp"
+        android:text="删除"/>
+
 
 </LinearLayout>
