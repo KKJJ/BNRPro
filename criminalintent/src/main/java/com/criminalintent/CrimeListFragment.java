@@ -6,13 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Kuang on 2016/12/13.
@@ -21,6 +24,10 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
+    private CrimeAdapter mAdapter;
+
+    private static final String TAG = "--CrimeListFragment";
+    private UUID mClickCrimeId;
 
     @Nullable
     @Override
@@ -30,11 +37,37 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
-        CrimeAdapter mAdapter = new CrimeAdapter(crimeLab.getCrimes());
-        mCrimeRecyclerView.setAdapter(mAdapter);
+//        updateUI();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
+    /**
+     * 刷新界面UI
+     */
+    private void updateUI() {
+        CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
+        List<Crime> crimes = crimeLab.getCrimes();
+        if (mAdapter == null) {
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        } else {
+
+//            mAdapter.notifyDataSetChanged();
+
+            // 为什么视觉延迟？？
+            Crime crime = crimeLab.getCrime(mClickCrimeId);
+            int position = crimes.indexOf(crime);
+
+            mAdapter.notifyItemChanged(position, 1);
+
+        }
     }
 
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
@@ -50,13 +83,13 @@ public class CrimeListFragment extends Fragment {
 
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             View view = layoutInflater.inflate(R.layout.list_item_crime, parent, false);
-
             return new CrimeHolder(view);
         }
 
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
             Crime crime = mCrimes.get(position);
+            Log.d(TAG, "onBindViewHolder: position-------------" + position);
             holder.bindCrime(crime);
         }
 
@@ -86,16 +119,25 @@ public class CrimeListFragment extends Fragment {
             mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(mCrime.getDate().toString());
             mSolvedCheckBox.setChecked(mCrime.isSolved());
+
+            mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mCrime.setSolved(isChecked);
+                }
+            });
         }
 
         @Override
         public void onClick(View v) {
 
-            Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
+            mClickCrimeId = mCrime.getId();
+            Intent intent = CrimeActivity.newIntent(getActivity(), mClickCrimeId);
             startActivity(intent);
 
         }
 
     }
+
 
 }
