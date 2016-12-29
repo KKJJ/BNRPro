@@ -98,7 +98,7 @@ public class CrimeListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_item_new_item:
                 Crime crime = new Crime();
-                CrimeLab.getInstance(getActivity()).adddCrime(crime);
+                CrimeLab.getInstance(getActivity()).addCrime(crime);
 //                Intent intent = CrimeActivity.newIntent(getActivity(), mClickCrimeId);
                 Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
                 startActivity(intent);
@@ -118,10 +118,11 @@ public class CrimeListFragment extends Fragment {
         int size = crimeLab.getCrimes().size();
         // ①
         String subtitle = getString(R.string.subtitle_format, size);
+        subtitle = getResources().getQuantityString(R.plurals.subtitle_plural, size, size);
 
         // ②
-        String sub = getString(R.string.subtitle_format);
-        subtitle = String.format(sub, size);
+//        String sub = getString(R.string.subtitle_format);
+//        subtitle = String.format(sub, size);
 
         if (!mSubtitleVisible) {
             subtitle = null;
@@ -268,17 +269,14 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-
             mClickCrimeId = mCrime.getId();
 //            Intent intent = CrimeActivity.newIntent(getActivity(), mClickCrimeId);
             Intent intent = CrimePagerActivity.newIntent(getActivity(), mClickCrimeId);
             startActivityForResult(intent, REQUEST_CODE);
-
         }
 
         @Override
         public boolean onLongClick(View v) {
-
             final CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
             deleteOperation(crimeLab, mCrime); // 删除操作
             return true;
@@ -303,6 +301,7 @@ public class CrimeListFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 crimeLab.deleteCrime(c.getId());
                 mAdapter.notifyDataSetChanged(); // 刷新数据
+                updateSubtitle(); // 刷新工具栏
             }
         }).create().show();
     }

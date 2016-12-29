@@ -32,7 +32,7 @@ public class CrimeLab {
         }
     }
 
-    public void adddCrime(Crime c) {
+    public void addCrime(Crime c) {
         mCrimes.add(c);
     }
 

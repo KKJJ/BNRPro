@@ -32,7 +32,7 @@ public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
     private static final String DIALOG_TIME = "DialogTime";
-    private static final String IS_DELETE = "is_delete";
+    private static final String IS_REFRESH_TOTAL = "is_delete";
     private static final int REQUEST_DATE = 1000;
     private static final int REQUEST_TIME = 1001;
 
@@ -43,6 +43,7 @@ public class CrimeFragment extends Fragment {
     private Button mTimeButton;
     private CheckBox mSolvedCheckBox;
     private Button mDeleteButton;
+    private Button mConfirmButton;
 
     /**
      * @param crimeId
@@ -129,7 +130,19 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ifRealDelete();
+                deleteConfirm();
+            }
+        });
+
+        mConfirmButton = (Button) v.findViewById(R.id.crime_confirm);
+        mConfirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                CrimeLab.getInstance(getActivity()).addCrime(mCrime);
+//                Intent data = new Intent();
+//                data.putExtra(IS_REFRESH_TOTAL, true);
+//                getActivity().setResult(Activity.RESULT_OK, data);
+                getActivity().finish();
             }
         });
 
@@ -139,7 +152,7 @@ public class CrimeFragment extends Fragment {
         return v;
     }
 
-    private void ifRealDelete() {
+    private void deleteConfirm() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("操作提示").setMessage("是否确认删除?").setCancelable(false)
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -152,12 +165,11 @@ public class CrimeFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 CrimeLab.getInstance(getActivity()).deleteCrime(mCrime.getId());
                 Intent data = new Intent();
-                data.putExtra(IS_DELETE, true);
+                data.putExtra(IS_REFRESH_TOTAL, true);
                 getActivity().setResult(Activity.RESULT_OK, data);
                 getActivity().finish();
             }
-        }).create();
-        builder.show();
+        }).create().show();
     }
 
     /**
@@ -165,7 +177,7 @@ public class CrimeFragment extends Fragment {
      * @return
      */
     public static boolean getIsDelete(Intent data) {
-        return data.getBooleanExtra(IS_DELETE, false);
+        return data.getBooleanExtra(IS_REFRESH_TOTAL, false);
     }
 
     private void updateDate() {
