@@ -90,6 +90,7 @@ public class CrimeListFragment extends Fragment {
         } else {
             subtitleItem.setTitle(R.string.show_subtitle);
         }
+
     }
 
     @Override
@@ -98,12 +99,13 @@ public class CrimeListFragment extends Fragment {
             case R.id.menu_item_new_item:
                 Crime crime = new Crime();
                 CrimeLab.getInstance(getActivity()).adddCrime(crime);
+//                Intent intent = CrimeActivity.newIntent(getActivity(), mClickCrimeId);
                 Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
                 startActivity(intent);
                 return true;
             case R.id.menu_item_show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
-                getActivity().invalidateOptionsMenu();
+                getActivity().invalidateOptionsMenu(); // 重绘工具栏
                 updateSubtitle();
                 return true;
             default:
@@ -138,18 +140,8 @@ public class CrimeListFragment extends Fragment {
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
-//            mAdapter.setOnItemClickListener(new OnItemClickListener() {
-//                @Override
-//                public void onItemClick(View v, int pos) {
-//                    Toast.makeText(getActivity(), "click " + pos, Toast.LENGTH_LONG).show();
-//                }
-//
-//                @Override
-//                public void onItemLongClick(View v, int pos) {
-//                    Toast.makeText(getActivity(), "longclick " + pos, Toast.LENGTH_LONG).show();
-//                    ifDelete(pos);
-//                }
-//            });
+//            mAdapter.setOnItemClickListener(onItemClickListener); // 设置自定义接口的监听
+
         } else {
             Log.d(TAG, "updateUI: isDelete----" + isDelete);
             if (isDelete) { // 是删除之后返回，全部刷新
@@ -168,6 +160,23 @@ public class CrimeListFragment extends Fragment {
 
         updateSubtitle();
     }
+
+    OnItemClickListener onItemClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(View v, int pos) {
+            Toast.makeText(getActivity(), "click " + pos, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onItemLongClick(View v, int pos) {
+            Toast.makeText(getActivity(), "longclick " + pos, Toast.LENGTH_LONG).show();
+
+            final CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
+            final Crime crime = crimeLab.getCrimes().get(pos);
+
+            deleteOperation(crimeLab, crime); // 自定义监听方式的 删除操作
+        }
+    };
 
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
@@ -236,8 +245,8 @@ public class CrimeListFragment extends Fragment {
 
         public CrimeHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this); // 点击监听
+            itemView.setOnLongClickListener(this); // 长按监听
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
             mDateTextView = (TextView) itemView.findViewById(R.id.list_item_crime_date_text_view);
             mSolvedCheckBox = (CheckBox) itemView.findViewById(R.id.list_item_crime_solved_check_box);
@@ -269,34 +278,22 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public boolean onLongClick(View v) {
-            ifRealDelete();
+
+            final CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
+            deleteOperation(crimeLab, mCrime); // 删除操作
             return true;
-        }
-
-        private void ifRealDelete() {
-            Toast.makeText(getActivity(), "111111", Toast.LENGTH_LONG).show();
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("重要操作提示").setMessage("是否确认删除?").setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            }).setPositiveButton("删除", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    CrimeLab.getInstance(getActivity()).deleteCrime(mCrime.getId());
-                    mAdapter.notifyDataSetChanged(); // 刷新数据
-                }
-            }).create().show();
         }
     }
 
-    private void ifDelete(int pos) {
-        final CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
-        final Crime crime = crimeLab.getCrimes().get(pos);
-
+    /**
+     * 删除操作
+     *
+     * @param crimeLab
+     * @param c
+     */
+    private void deleteOperation(final CrimeLab crimeLab, final Crime c) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("重要操作提示").setMessage("是否确认删除?").setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setTitle("操作提示").setMessage("是否确认删除?").setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -304,7 +301,7 @@ public class CrimeListFragment extends Fragment {
         }).setPositiveButton("删除", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                crimeLab.deleteCrime(crime.getId());
+                crimeLab.deleteCrime(c.getId());
                 mAdapter.notifyDataSetChanged(); // 刷新数据
             }
         }).create().show();
