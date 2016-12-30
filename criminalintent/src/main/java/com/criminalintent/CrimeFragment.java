@@ -69,6 +69,13 @@ public class CrimeFragment extends Fragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        CrimeLab.getInstance(getActivity()).updateCrime(mCrime);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -176,7 +183,7 @@ public class CrimeFragment extends Fragment {
      * @param data
      * @return
      */
-    public static boolean getIsDelete(Intent data) {
+    public static boolean getIsRefreshAll(Intent data) {
         return data.getBooleanExtra(IS_REFRESH_TOTAL, false);
     }
 
@@ -190,16 +197,12 @@ public class CrimeFragment extends Fragment {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-        if (requestCode == REQUEST_DATE) {
+        if (requestCode == REQUEST_DATE || requestCode == REQUEST_TIME) {
             Date date = DatePickerFragment.getResultDate(data);
             mCrime.setDate(date);
             updateDate();
         }
-        if (requestCode == REQUEST_TIME) {
-            Date date = TimePickerFragment.getResultDate(data);
-            mCrime.setDate(date);
-            updateDate();
-        }
+
 
     }
 

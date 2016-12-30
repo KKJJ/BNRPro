@@ -76,7 +76,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="80dp"
-        android:text="确定"/>
+        android:text="@string/confirm"/>
 
     <Button
         android:id="@+id/crime_delete"
@@ -85,7 +85,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="10dp"
-        android:text="删除"/>
+        android:text="@string/delete"/>
 
 
 </LinearLayout>

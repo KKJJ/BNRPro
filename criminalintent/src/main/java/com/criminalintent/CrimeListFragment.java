@@ -41,6 +41,7 @@ public class CrimeListFragment extends Fragment {
     private UUID mClickCrimeId;
 
     private boolean isDelete = false;
+    private CrimeLab mCrimeLab;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class CrimeListFragment extends Fragment {
         if (savedInstanceState != null) {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
         }
+        mCrimeLab = CrimeLab.getInstance(getActivity());
 
         updateUI();
 
@@ -98,7 +100,7 @@ public class CrimeListFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.menu_item_new_item:
                 Crime crime = new Crime();
-                CrimeLab.getInstance(getActivity()).addCrime(crime);
+                mCrimeLab.addCrime(crime);
 //                Intent intent = CrimeActivity.newIntent(getActivity(), mClickCrimeId);
                 Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
                 startActivity(intent);
@@ -114,15 +116,14 @@ public class CrimeListFragment extends Fragment {
     }
 
     private void updateSubtitle() {
-        CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
-        int size = crimeLab.getCrimes().size();
+        int size = mCrimeLab.getCrimes().size();
         // ①
         String subtitle = getString(R.string.subtitle_format, size);
         subtitle = getResources().getQuantityString(R.plurals.subtitle_plural, size, size);
 
         // ②
 //        String sub = getString(R.string.subtitle_format);
-//        subtitle = String.format(sub, size);
+//        subtitle = String.format(sub, size, size);
 
         if (!mSubtitleVisible) {
             subtitle = null;
@@ -136,8 +137,8 @@ public class CrimeListFragment extends Fragment {
      * 刷新界面UI
      */
     private void updateUI() {
-        CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
-        List<Crime> crimes = crimeLab.getCrimes();
+
+        List<Crime> crimes = mCrimeLab.getCrimes();
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
@@ -145,17 +146,22 @@ public class CrimeListFragment extends Fragment {
 
         } else {
             Log.d(TAG, "updateUI: isDelete----" + isDelete);
+            mAdapter.setCrimes(crimes);
             if (isDelete) { // 是删除之后返回，全部刷新
                 mAdapter.notifyDataSetChanged();
                 isDelete = false;
             } else { // 否则只刷新改变的部分
 
-                Crime crime = crimeLab.getCrime(mClickCrimeId);
-                int position = crimes.indexOf(crime);
+                if (mClickCrimeId != null) {
+                    Crime crime = mCrimeLab.getCrime(mClickCrimeId);
+                    int position = crimes.indexOf(crime); // 之前一直返回-1，就是列表里找不到--没重写eauals和hashcode方法！！！！！！！！！
 
-                // 为什么视觉延迟？？
+                    // 为什么视觉延迟？？
 //            mAdapter.notifyItemChanged(position);
-                mAdapter.notifyItemChanged(position, 1);
+                    mAdapter.notifyItemChanged(position, 1);
+                } else {
+                    mAdapter.notifyDataSetChanged();
+                }
             }
         }
 
@@ -172,10 +178,9 @@ public class CrimeListFragment extends Fragment {
         public void onItemLongClick(View v, int pos) {
             Toast.makeText(getActivity(), "longclick " + pos, Toast.LENGTH_LONG).show();
 
-            final CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
-            final Crime crime = crimeLab.getCrimes().get(pos);
+            final Crime crime = mCrimeLab.getCrimes().get(pos);
 
-            deleteOperation(crimeLab, crime); // 自定义监听方式的 删除操作
+            deleteOperation(mCrimeLab, crime); // 自定义监听方式的 删除操作
         }
     };
 
@@ -235,6 +240,10 @@ public class CrimeListFragment extends Fragment {
         public int getItemCount() {
             return mCrimes.size();
         }
+
+        public void setCrimes(List<Crime> crimes) {
+            mCrimes = crimes;
+        }
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
@@ -263,6 +272,7 @@ public class CrimeListFragment extends Fragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mCrime.setSolved(isChecked);
+                    mCrimeLab.updateCrime(mCrime);
                 }
             });
         }
@@ -277,8 +287,7 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public boolean onLongClick(View v) {
-            final CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
-            deleteOperation(crimeLab, mCrime); // 删除操作
+            deleteOperation(mCrimeLab, mCrime); // 删除操作
             return true;
         }
     }
@@ -300,6 +309,7 @@ public class CrimeListFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 crimeLab.deleteCrime(c.getId());
+                mAdapter.setCrimes(crimeLab.getCrimes());
                 mAdapter.notifyDataSetChanged(); // 刷新数据
                 updateSubtitle(); // 刷新工具栏
             }
@@ -315,9 +325,10 @@ public class CrimeListFragment extends Fragment {
             return;
         }
         if (requestCode == REQUEST_CODE) {
-            isDelete = CrimeFragment.getIsDelete(data);
+            isDelete = CrimeFragment.getIsRefreshAll(data);
             Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_LONG).show();
         }
     }
+
 
 }
