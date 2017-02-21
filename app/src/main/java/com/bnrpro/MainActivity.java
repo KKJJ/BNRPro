@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate() called");
+        Log.i(TAG, "onCreate() called");
         setContentView(R.layout.activity_main);
 
         mTrueButton = (Button) findViewById(R.id.true_button);
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     mCurrentIndex = mQuestionBank.length - Math.abs(mCurrentIndex - 1) % mQuestionBank.length;
                 }
-                Log.d("mCurrentIndex--", "" + mCurrentIndex);
+                Log.i("mCurrentIndex--", "" + mCurrentIndex);
                 updateQuestion();
             }
         });
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void updateQuestion() {
         // 通过打印异常  跟踪栈信息
-//        Log.d(TAG, "updateQuestion--" + mCurrentIndex + ". ", new Exception());
+//        Log.i(TAG, "updateQuestion--" + mCurrentIndex + ". ", new Exception());
 
         if (mCurrentIndex >= 0 && mCurrentIndex < mQuestionBank.length) {
             int questionId = mQuestionBank[mCurrentIndex].getTextResId();
@@ -190,43 +190,43 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(TAG, "onSaveInstanceState");
+        Log.i(TAG, "onSaveInstanceState");
         outState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.d(TAG, "onStart() called");
+        Log.i(TAG, "onStart() called");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume() called");
+        Log.i(TAG, "onResume() called");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause() called");
+        Log.i(TAG, "onPause() called");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop() called");
+        Log.i(TAG, "onStop() called");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "onDestroy() called");
+        Log.i(TAG, "onDestroy() called");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.d(TAG, "onRestart() called");
+        Log.i(TAG, "onRestart() called");
     }
 }

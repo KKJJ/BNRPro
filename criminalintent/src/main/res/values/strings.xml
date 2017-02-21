@@ -15,8 +15,22 @@
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle_format">%1$s crimes</string>
     <string name="no_crime_to_show">没有crime记录可以显示</string>
-    <string name="confirm">confirm</string>
-    <string name="delete">delete</string>
+    <string name="crime_confirm">confirm</string>
+    <string name="crime_delete">delete</string>
+    <string name="crime_choose_suspect">choose suspect</string>
+    <string name="crime_send_report">send crime report</string>
+    <string name="crime_call_suspect">call suspect</string>
+
+    <string name="crime_report">%1$s!
+        The crime was discovered on %2$s. %3$s, and %4$s
+    </string>
+    <string name="crime_report_solved">The case is solved</string>
+    <string name="crime_report_unsolved">The case is not solved</string>
+    <string name="crime_report_no_suspect">there is no suspect.</string>
+    <string name="crime_report_suspect">the suspect is %s.</string>
+
+    <string name="crime_report_subject">CriminalIntent Crime Report</string>
+    <string name="send_report">Send crime report via</string>
 
     <plurals
         name="subtitle_plural">

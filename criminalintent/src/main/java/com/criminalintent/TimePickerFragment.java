@@ -107,4 +107,5 @@ public class TimePickerFragment extends DialogFragment {
     public static Date getResultDate(Intent data) {
         return (Date) data.getSerializableExtra(EXTRA_DATE);
     }
+
 }

@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +46,7 @@ public class CrimeListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Nullable
@@ -145,7 +145,7 @@ public class CrimeListFragment extends Fragment {
 //            mAdapter.setOnItemClickListener(onItemClickListener); // 设置自定义接口的监听
 
         } else {
-            Log.d(TAG, "updateUI: isDelete----" + isDelete);
+//            Log.i(TAG, "updateUI: isDelete----" + isDelete);
             mAdapter.setCrimes(crimes);
             if (isDelete) { // 是删除之后返回，全部刷新
                 mAdapter.notifyDataSetChanged();
@@ -180,7 +180,7 @@ public class CrimeListFragment extends Fragment {
 
             final Crime crime = mCrimeLab.getCrimes().get(pos);
 
-            deleteOperation(mCrimeLab, crime); // 自定义监听方式的 删除操作
+            deleteOperation(crime); // 自定义监听方式的 删除操作
         }
     };
 
@@ -287,7 +287,7 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public boolean onLongClick(View v) {
-            deleteOperation(mCrimeLab, mCrime); // 删除操作
+            deleteOperation(mCrime); // 删除操作
             return true;
         }
     }
@@ -295,10 +295,9 @@ public class CrimeListFragment extends Fragment {
     /**
      * 删除操作
      *
-     * @param crimeLab
      * @param c
      */
-    private void deleteOperation(final CrimeLab crimeLab, final Crime c) {
+    private void deleteOperation(final Crime c) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("操作提示").setMessage("是否确认删除?").setNegativeButton("取消", new DialogInterface.OnClickListener() {
             @Override
@@ -308,8 +307,8 @@ public class CrimeListFragment extends Fragment {
         }).setPositiveButton("删除", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                crimeLab.deleteCrime(c.getId());
-                mAdapter.setCrimes(crimeLab.getCrimes());
+                mCrimeLab.deleteCrime(c.getId());
+                mAdapter.setCrimes(mCrimeLab.getCrimes());
                 mAdapter.notifyDataSetChanged(); // 刷新数据
                 updateSubtitle(); // 刷新工具栏
             }

@@ -13,23 +13,24 @@ public class Crime {
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
+    private String mSuspect;
 
     public Crime() {
         this(UUID.randomUUID());
 
 
-//        Log.d("--Crime--date1--", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS E").format(mDate) + "--");
-//        Log.d("--Crime--date2--", new SimpleDateFormat("E, MM dd, yyyy").format(mDate) + "--");
-//        Log.d("--Crime--date3--", new SimpleDateFormat("EEEE, MMMM dd, yyyy kk:mm").format(mDate) + "--");
+//        Log.i("--Crime--date1--", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS E").format(mDate) + "--");
+//        Log.i("--Crime--date2--", new SimpleDateFormat("E, MM dd, yyyy").format(mDate) + "--");
+//        Log.i("--Crime--date3--", new SimpleDateFormat("EEEE, MMMM dd, yyyy kk:mm").format(mDate) + "--");
 
 //        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-//        Log.d("--Crime--gregor--", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS E").format(gregorianCalendar.getTime()) + "--");
+//        Log.i("--Crime--gregor--", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS E").format(gregorianCalendar.getTime()) + "--");
 
 
         // DateFormat
 //        java.text.DateFormat dateFormat = DateFormat.getDateFormat();
 //        String format = dateFormat.format(new Date());
-//        Log.d("--format--date--", format);
+//        Log.i("--format--date--", format);
 
     }
 
@@ -67,6 +68,18 @@ public class Crime {
         mSolved = solved;
     }
 
+    public String getSuspect() {
+        return mSuspect;
+    }
+
+    public void setSuspect(String suspect) {
+        this.mSuspect = suspect;
+    }
+
+    public String getPhotoFilename() {
+        return "IMG_" + getId().toString() + ".jpg";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,5 +101,16 @@ public class Crime {
         result = 31 * result + (mDate != null ? mDate.hashCode() : 0);
         result = 31 * result + (mSolved ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Crime{" +
+                "mId=" + mId +
+                ", mTitle='" + mTitle + '\'' +
+                ", mDate=" + mDate +
+                ", mSolved=" + mSolved +
+                ", mSuspect='" + mSuspect + '\'' +
+                '}';
     }
 }
