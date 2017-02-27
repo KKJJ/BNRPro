@@ -1,5 +1,6 @@
 package com.criminalintent;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,16 +38,41 @@ public class CrimeListFragment extends Fragment {
     private boolean mSubtitleVisible;
 
     private static final String TAG = "--CrimeListFragment";
-    private UUID mClickCrimeId;
+    public UUID mClickCrimeId;
 
     private boolean isDelete = false;
     private CrimeLab mCrimeLab;
+
+    private Callbacks mCallbacks;
+    private CheckCallbacks mCheckCallbacks;
+
+    public interface Callbacks {
+        void onCrimeSelected(Crime crime);
+    }
+
+    public interface CheckCallbacks {
+        void onCheckedChanged(Crime crime, boolean isChecked);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        LogUtil.e(TAG, "onAttach: " + activity.getClass().getSimpleName());
+        mCallbacks = (Callbacks) activity;
+        mCheckCallbacks = (CheckCallbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+        mCheckCallbacks = null;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
     @Nullable
@@ -101,9 +127,12 @@ public class CrimeListFragment extends Fragment {
             case R.id.menu_item_new_item:
                 Crime crime = new Crime();
                 mCrimeLab.addCrime(crime);
-//                Intent intent = CrimeActivity.newIntent(getActivity(), mClickCrimeId);
-                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
-                startActivity(intent);
+
+//                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
+//                startActivity(intent);
+
+                updateUI();
+                mCallbacks.onCrimeSelected(crime);
                 return true;
             case R.id.menu_item_show_subtitle:
                 mSubtitleVisible = !mSubtitleVisible;
@@ -136,7 +165,7 @@ public class CrimeListFragment extends Fragment {
     /**
      * 刷新界面UI
      */
-    private void updateUI() {
+    public void updateUI() {
 
         List<Crime> crimes = mCrimeLab.getCrimes();
         if (mAdapter == null) {
@@ -273,6 +302,7 @@ public class CrimeListFragment extends Fragment {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     mCrime.setSolved(isChecked);
                     mCrimeLab.updateCrime(mCrime);
+                    mCheckCallbacks.onCheckedChanged(mCrime, isChecked); /////////////////
                 }
             });
         }
@@ -280,9 +310,9 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View v) {
             mClickCrimeId = mCrime.getId();
-//            Intent intent = CrimeActivity.newIntent(getActivity(), mClickCrimeId);
-            Intent intent = CrimePagerActivity.newIntent(getActivity(), mClickCrimeId);
-            startActivityForResult(intent, REQUEST_CODE);
+//            Intent intent = CrimePagerActivity.newIntent(getActivity(), mClickCrimeId);
+//            startActivityForResult(intent, REQUEST_CODE);
+            mCallbacks.onCrimeSelected(mCrime);
         }
 
         @Override
@@ -290,6 +320,7 @@ public class CrimeListFragment extends Fragment {
             deleteOperation(mCrime); // 删除操作
             return true;
         }
+
     }
 
     /**

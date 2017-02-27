@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -65,7 +66,7 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_PHOTO = 1003;
     private static final String PHOTO_VIEW = "PHOTO_VIEW";
 
-    private Crime mCrime;
+    public Crime mCrime;
     private EditText mTitleField;
     private Button mDateTimeShowButton;
     private Button mDateButton;
@@ -86,6 +87,30 @@ public class CrimeFragment extends Fragment {
     private File mPhotoFile;
 
     private Uri uri;
+
+    private Callbacks mCallbacks;
+
+    public interface Callbacks {
+        void onCrimeUpdated(Crime crime);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        LogUtil.e(TAG, "onAttach: " + activity.getClass().getSimpleName());
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+
+    private void updateCrime() {
+        CrimeLab.getInstance(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
+    }
 
     /**
      * @param crimeId
@@ -109,6 +134,7 @@ public class CrimeFragment extends Fragment {
         mCrimeLab = CrimeLab.getInstance(getActivity());
         mCrime = mCrimeLab.getCrime(crimeId);
         mPhotoFile = mCrimeLab.getPhotoFile(mCrime);
+
 
     }
 
@@ -134,6 +160,7 @@ public class CrimeFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mCrime.setTitle(s.toString());
                 Log.i(TAG, "onTextChanged: " + s.toString());
+                updateCrime();
             }
 
             @Override
@@ -171,6 +198,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
+                updateCrime();
             }
         });
 
@@ -253,7 +281,7 @@ public class CrimeFragment extends Fragment {
         // 拍照
         picture(v, packageManager);
 
-        // 加密联系
+        // 加密练习
 //         secretTest();
 
         return v;
@@ -292,8 +320,15 @@ public class CrimeFragment extends Fragment {
     private void picture(View v, PackageManager packageManager) {
         mPhotoView = (ImageView) v.findViewById(R.id.photo_view);
         mPhotoButton = (ImageButton) v.findViewById(R.id.crime_photo_button);
-        // TODO : set image
-        updatePhotoView();
+
+        ViewTreeObserver observer = mPhotoView.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // TODO : set image
+                updatePhotoView();
+            }
+        });
 
         // TODO take photo
         final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -494,6 +529,7 @@ public class CrimeFragment extends Fragment {
         if (requestCode == REQUEST_DATE || requestCode == REQUEST_TIME) {
             Date date = requestCode == REQUEST_DATE ? DatePickerFragment.getResultDate(data) : TimePickerFragment.getResultDate(data);
             mCrime.setDate(date);
+            updateCrime(); //////////////////////
             updateDate();
         } else if (requestCode == REQUEST_CONTACT && data != null) {
             Uri uri = data.getData();
@@ -511,6 +547,7 @@ public class CrimeFragment extends Fragment {
                 Log.i(TAG, "onActivityResult: select--id----" + id);
 
                 mCrime.setSuspect(suspect);
+                updateCrime(); //////////////////////
                 mChooseSuspectButton.setText(suspect);
                 mCrimeLab.updateCrime(mCrime);
 
@@ -518,9 +555,14 @@ public class CrimeFragment extends Fragment {
                 cursor.close();
             }
         } else if (requestCode == REQUEST_PHOTO) {
+            updateCrime(); //////////////////////
             updatePhotoView();
         }
 
+    }
+
+    public void onCheckedChange(boolean isChecked) {
+        mSolvedCheckBox.setChecked(isChecked);
     }
 
 }

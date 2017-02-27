@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import java.util.List;
 import java.util.UUID;
 
-public class CrimePagerActivity extends AppCompatActivity {
+public class CrimePagerActivity extends AppCompatActivity
+        implements CrimeFragment.Callbacks {
 
     private static final String EXTRA_CRIME_ID = "com.criminalintent.crime_id";
 
@@ -77,6 +78,12 @@ public class CrimePagerActivity extends AppCompatActivity {
             }
         }
 //        mViewPager.setOffscreenPageLimit(3); // 表示当前页面两边各向前向后缓存3个
+
+    }
+
+
+    @Override
+    public void onCrimeUpdated(Crime crime) {
 
     }
 
