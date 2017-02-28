@@ -135,6 +135,8 @@ public class CrimeFragment extends Fragment {
         mCrime = mCrimeLab.getCrime(crimeId);
         mPhotoFile = mCrimeLab.getPhotoFile(mCrime);
 
+        
+
     }
 
     @Override
