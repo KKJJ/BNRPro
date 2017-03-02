@@ -47,6 +47,11 @@
             android:name=".PhotoViewActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
+        <activity
+            android:name=".TestActivity"
+
+            android:theme="@style/DialogActivityStyle">
+        </activity>
     </application>
 
 </manifest>

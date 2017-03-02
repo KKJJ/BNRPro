@@ -135,7 +135,6 @@ public class CrimeFragment extends Fragment {
         mCrime = mCrimeLab.getCrime(crimeId);
         mPhotoFile = mCrimeLab.getPhotoFile(mCrime);
 
-        
 
     }
 
@@ -208,6 +207,10 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 deleteConfirm();
+
+                // 测试Dialog主题的Activity
+//                startActivity(new Intent(getContext(), TestActivity.class));
+
             }
         });
 

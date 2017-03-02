@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/beatBox" />
             <option value="$PROJECT_DIR$/camerademovn" />
             <option value="$PROJECT_DIR$/criminalintent" />
+            <option value="$PROJECT_DIR$/netTest" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
