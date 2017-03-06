@@ -36,4 +36,5 @@ dependencies {
     compile 'com.squareup.okio:okio:1.11.0'
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:percent:25.0.1'
+    compile 'com.android.support:recyclerview-v7:25.0.1'
 }

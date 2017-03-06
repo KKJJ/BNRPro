@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -35,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnRetrofit;
     private Button btnokHttp;
     private Button btnPercent;
+    private Button btnArrayAdapter;
+    private Button btnStaggeredLayoutManager;
+    private Button btnChatLbtnChatLayout;
+    private AutoCompleteTextView mAutoCompleteTextView;
 
 
     @Override
@@ -46,10 +52,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnRetrofit = (Button) findViewById(R.id.btn_retrofit);
         btnokHttp = (Button) findViewById(R.id.btn_okhttp);
         btnPercent = (Button) findViewById(R.id.btn_percent);
+        btnArrayAdapter = (Button) findViewById(R.id.btn_arrayAdapter);
+        btnStaggeredLayoutManager = (Button) findViewById(R.id.btn_staggeredLayoutManger);
+        btnChatLbtnChatLayout = (Button) findViewById(R.id.btn_chatLayout);
+        mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.auto_ctv);
 
         btnRetrofit.setOnClickListener(this);
         btnokHttp.setOnClickListener(this);
         btnPercent.setOnClickListener(this);
+        btnArrayAdapter.setOnClickListener(this);
+        btnStaggeredLayoutManager.setOnClickListener(this);
+        btnChatLbtnChatLayout.setOnClickListener(this);
+
+        String[] strs = {"aa", "aaa", "ab", "abc", "aac"};
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strs);
+        mAutoCompleteTextView.setAdapter(arrayAdapter);
+
     }
 
     // http://www.kuaidi100.com/query ?type=zhongtong&postid=428763978880
@@ -68,6 +86,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.btn_percent:
                 startActivity(new Intent(this, PercentActivity.class));
+
+                break;
+            case R.id.btn_arrayAdapter:
+                startActivity(new Intent(this, ArrayAdapterActivity.class));
+
+                break;
+            case R.id.btn_staggeredLayoutManger:
+                startActivity(new Intent(this, StaggeredGridLayoutManagerActivity.class));
+
+                break;
+            case R.id.btn_chatLayout:
+                startActivity(new Intent(this, ChatLayoutActivity.class));
 
                 break;
             default:

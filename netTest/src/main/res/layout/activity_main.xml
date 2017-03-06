@@ -33,4 +33,36 @@
         android:text="Test percent"
         android:textSize="20sp"/>
 
+    <Button
+        android:id="@+id/btn_arrayAdapter"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Test ArrayAdapter"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/btn_staggeredLayoutManger"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Test SLayoutManager"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/btn_chatLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Test ChatLayout"
+        android:textSize="20sp"/>
+
+
+    <AutoCompleteTextView
+        android:id="@+id/auto_ctv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:completionHint="222222222"
+        android:completionThreshold="1"
+        android:text="这是个什么"
+        android:textSize="20sp"
+        />
+
 </LinearLayout>
