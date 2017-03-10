@@ -19,8 +19,8 @@ public class MyContentProvider extends ContentProvider {
 
     static {
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        mUriMatcher.addURI("com.litedemo.provider", "Person", TABLE_DIR);
-        mUriMatcher.addURI("com.litedemo.provider", "Person/#", TABLE_ITEM);
+        mUriMatcher.addURI("com.litedemo.provider", "person", TABLE_DIR);
+        mUriMatcher.addURI("com.litedemo.provider", "person/#", TABLE_ITEM);
     }
 
     public MyContentProvider() {
