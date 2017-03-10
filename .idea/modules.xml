@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/beatBox/beatBox.iml" filepath="$PROJECT_DIR$/beatBox/beatBox.iml" />
       <module fileurl="file://$PROJECT_DIR$/camerademovn/camerademovn.iml" filepath="$PROJECT_DIR$/camerademovn/camerademovn.iml" />
       <module fileurl="file://$PROJECT_DIR$/criminalintent/criminalintent.iml" filepath="$PROJECT_DIR$/criminalintent/criminalintent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/litepaldemo/litepaldemo.iml" filepath="$PROJECT_DIR$/litepaldemo/litepaldemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/netTest/netTest.iml" filepath="$PROJECT_DIR$/netTest/netTest.iml" />
     </modules>
   </component>

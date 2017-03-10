@@ -1,7 +1,17 @@
 package com.nettest;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +22,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -34,12 +45,20 @@ import retrofit2.http.Query;
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int REQUEST_PERMISSION_CODE_CALL_PHONE = 0;
+    private static final int REQUEST_PERMISSION_CODE_READ_CONTACTS = 1;
+
     private Button btnRetrofit;
     private Button btnokHttp;
     private Button btnPercent;
     private Button btnArrayAdapter;
     private Button btnStaggeredLayoutManager;
     private Button btnChatLbtnChatLayout;
+    private Button btnProcessDialog;
+    private Button btnRequestPetmission;
+    private Button btnBottomSheetDialog;
+    private Button btnContentProvider;
+    private Button btnContentProvider2;
     private AutoCompleteTextView mAutoCompleteTextView;
 
 
@@ -48,13 +67,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         btnRetrofit = (Button) findViewById(R.id.btn_retrofit);
         btnokHttp = (Button) findViewById(R.id.btn_okhttp);
         btnPercent = (Button) findViewById(R.id.btn_percent);
         btnArrayAdapter = (Button) findViewById(R.id.btn_arrayAdapter);
         btnStaggeredLayoutManager = (Button) findViewById(R.id.btn_staggeredLayoutManger);
         btnChatLbtnChatLayout = (Button) findViewById(R.id.btn_chatLayout);
+        btnProcessDialog = (Button) findViewById(R.id.btn_testProgressDialog);
+        btnRequestPetmission = (Button) findViewById(R.id.btn_testRequestPermission);
+        btnBottomSheetDialog = (Button) findViewById(R.id.btn_testBottomSheetDialog);
+        btnContentProvider = (Button) findViewById(R.id.btn_testContentProvider);
+        btnContentProvider2 = (Button) findViewById(R.id.btn_testContentProvider2);
         mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.auto_ctv);
 
         btnRetrofit.setOnClickListener(this);
@@ -63,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnArrayAdapter.setOnClickListener(this);
         btnStaggeredLayoutManager.setOnClickListener(this);
         btnChatLbtnChatLayout.setOnClickListener(this);
+        btnProcessDialog.setOnClickListener(this);
+        btnRequestPetmission.setOnClickListener(this);
+        btnBottomSheetDialog.setOnClickListener(this);
+        btnContentProvider.setOnClickListener(this);
+        btnContentProvider2.setOnClickListener(this);
 
         String[] strs = {"aa", "aaa", "ab", "abc", "aac"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strs);
@@ -100,9 +128,130 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, ChatLayoutActivity.class));
 
                 break;
+            case R.id.btn_testProgressDialog:
+                showProgressDialog();
+
+                break;
+            case R.id.btn_testRequestPermission:
+                callPhone();
+
+                break;
+            case R.id.btn_testBottomSheetDialog:
+
+                BottomSheetDialog sheetDialog = new BottomSheetDialog(this);
+                sheetDialog.setTitle("标题哦");
+                sheetDialog.setContentView(R.layout.activity_percent);
+
+                sheetDialog.show();
+
+                break;
+            case R.id.btn_testContentProvider:
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_PERMISSION_CODE_READ_CONTACTS);
+                } else {
+                    readContact();
+                }
+                break;
+            case R.id.btn_testContentProvider2:
+                startActivity(new Intent(this, ContentProviderActivity.class));
+                break;
             default:
                 break;
         }
+    }
+
+    private void readContact() {
+        int i = 0;
+        ArrayList<String> contactsList = new ArrayList<>();
+        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    String name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                    String number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String id = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)); // 得到的都是联系人的序号id
+                    i++;
+                    LogUtil.e(TAG, "onClick: " + "name = " + name + ",number = " + number);
+
+                    String data = name + "\n" + number;
+                    contactsList.add(data);
+                    if (i == 5) {
+                        break;
+                    }
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        Intent intent = ContactsActivity.newIntent(this, contactsList);
+        startActivity(intent);
+        LogUtil.e(TAG, "readContact: " + "success");
+    }
+
+    /**
+     * 通过 打电话 测试 6.0运行时权限
+     */
+    private void callPhone() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PERMISSION_CODE_CALL_PHONE);
+        } else {
+            call();
+        }
+    }
+
+    private void call() {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:10086"));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case REQUEST_PERMISSION_CODE_CALL_PHONE:
+                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    call();
+                } else {
+                    Toast.makeText(this, "你拒绝了打电话的权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case REQUEST_PERMISSION_CODE_READ_CONTACTS:
+                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    readContact();
+                } else {
+                    Toast.makeText(this, "你拒绝了读取联系人的权限", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    /**
+     * 显示等待progressDialog
+     */
+    private void showProgressDialog() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("这是Title");
+        progressDialog.setMessage("这是Message");
+        progressDialog.setCancelable(true);
+        progressDialog.show();
     }
 
     /**
@@ -186,12 +335,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-
     public interface RetrofitService {
         @GET("query")
         Call<Data> getData(@Query("type") String type, @Query("postid") String id);
     }
-
 
     private void testRetrofit1() {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl)
@@ -212,7 +359,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
-
 
     interface RetrofitInterface {
         @GET("query")

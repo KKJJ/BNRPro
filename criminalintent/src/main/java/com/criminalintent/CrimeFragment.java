@@ -1,5 +1,6 @@
 package com.criminalintent;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,11 +12,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -228,18 +232,23 @@ public class CrimeFragment extends Fragment {
 
         final Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
 //        pickContact.addCategory(Intent.CATEGORY_HOME); // 模拟无联系人应用的机器
-
         mChooseSuspectButton = (Button) v.findViewById(R.id.crime_choose_suspect);
         mSendReportButton = (Button) v.findViewById(R.id.crime_send_report);
         mChooseSuspectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(pickContact, REQUEST_CONTACT);
-            }
-        });
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                                                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, 1);
+                                                        } else {
+                                                            startActivityForResult(pickContact, REQUEST_CONTACT);
+                                                        }
+                                                    }
+                                                }
+
+        );
         mSendReportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                                                 @Override
+                                                 public void onClick(View v) {
 //                Intent intent = new Intent(Intent.ACTION_SEND)
 //                        .setType("text/plain")
 //                        .putExtra(Intent.EXTRA_TEXT, getCrimeReport())
@@ -247,38 +256,46 @@ public class CrimeFragment extends Fragment {
 //                intent = Intent.createChooser(intent, getString(R.string.send_report)); // 每次都弹出选择框
 //                startActivity(intent);
 
-                // 使用 ShareCompat.IntentBuilder 实现
-                Intent chooserIntent = ShareCompat.IntentBuilder.from(getActivity())
-                        .setType("text/plain")
-                        .setText(getCrimeReport())
-                        .setSubject(getString(R.string.crime_report_subject))
-                        .createChooserIntent(); // 每次都弹出选择框
+                                                     // 使用 ShareCompat.IntentBuilder 实现
+                                                     Intent chooserIntent = ShareCompat.IntentBuilder.from(getActivity())
+                                                             .setType("text/plain")
+                                                             .setText(getCrimeReport())
+                                                             .setSubject(getString(R.string.crime_report_subject))
+                                                             .createChooserIntent(); // 每次都弹出选择框
 //                .getIntent()
 
-                startActivity(chooserIntent);
-
-            }
-        });
+                                                     startActivity(chooserIntent);
+                                                 }
+                                             }
+        );
 
         mCallSuspectButton = (Button) v.findViewById(R.id.crime_call_suspect);
-        mCallSuspectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mCallSuspectButton.setOnClickListener(new View.OnClickListener()
 
-                startCallSuspectActivity(); // 启动打电话
+                                              {
+                                                  @Override
+                                                  public void onClick(View v) {
+
+                                                      startCallSuspectActivity(); // 启动打电话
+
 //                sendSMS("12345", "i'm mr.k,who are you?"); // 发短信
-            }
-        });
+                                                  }
+                                              }
+
+        );
 
         mTitleField.setText(mCrime.getTitle());
         mSolvedCheckBox.setChecked(mCrime.isSolved());
 
-        if (mCrime.getSuspect() != null) {
+        if (mCrime.getSuspect() != null)
+
+        {
             mChooseSuspectButton.setText(mCrime.getSuspect());
         }
 
         PackageManager packageManager = getActivity().getPackageManager();
         if (packageManager.resolveActivity(pickContact, PackageManager.MATCH_DEFAULT_ONLY) == null) {
+            // 无联系人应用，按钮置灰
             mChooseSuspectButton.setEnabled(false);
         }
 
@@ -337,18 +354,14 @@ public class CrimeFragment extends Fragment {
         // TODO take photo
         final Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         boolean canTakePhoto = mPhotoFile != null && captureIntent.resolveActivity(packageManager) != null;
-
         if (canTakePhoto) {
-
             if (Build.VERSION.SDK_INT >= 24) { // API大于24需要特殊处理
-
                 uri = FileProvider.getUriForFile(getContext(), "com.criminalintent.fileprovider", mPhotoFile);
                 Log.i(TAG, "onCreateView: 当前机器API大于24");
             } else {
                 uri = Uri.fromFile(mPhotoFile);
                 Log.i(TAG, "onCreateView: 当前机器API小于24");
             }
-
         } else {
             Snackbar.make(new View(getContext()), "该机器没有相机功能", Snackbar.LENGTH_LONG).show();
             Log.i(TAG, "该机器没有相机功能 ");
@@ -380,7 +393,6 @@ public class CrimeFragment extends Fragment {
 
                 Intent intent = PhotoViewActivity.newIntent(getContext(), mPhotoFile.getPath());
                 startActivity(intent);
-
             }
         });
     }
@@ -394,43 +406,23 @@ public class CrimeFragment extends Fragment {
             Toast.makeText(getActivity(), "暂无嫌疑人", Toast.LENGTH_LONG).show();
             return;
         }
-        String contactId = null;
         String number = null;
-        String suspect = null;
-        Cursor cursor = getActivity().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
+        /**
+         * 此处不合理，在打电话的时候去请求读取联系人，应该在选择嫌疑人的时候  保存号码
+         */
+        // 注意区分：ContactsContract.CommonDataKinds.Phone.CONTACT_ID 　　　 ContactsContract.CommonDataKinds.Phone._ID   得到的都是联系人的序号id
+        Cursor cursor = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " = ?", new String[]{mCrime.getSuspect()}, null);
         try {
             if (cursor.getColumnCount() == 0) {
                 return;
             }
             cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                suspect = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                if (mCrime.getSuspect().equals(suspect)) {
-                    contactId = id;
-                    break;
-                }
-                cursor.moveToNext();
-            }
+            number = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                        String idd = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID)); // 错误的--记得是[CONTACT_ID]
         } finally {
             cursor.close();
-        }
-        if (contactId == null) {
-            return;
-        }
-
-        // 注意区分：ContactsContract.CommonDataKinds.Phone.CONTACT_ID 　　　 ContactsContract.CommonDataKinds.Phone._ID
-        Cursor cursor1 = getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{contactId}, null);
-        try {
-            if (cursor1.getColumnCount() == 0) {
-                return;
-            }
-            cursor1.moveToFirst();
-            number = cursor1.getString(cursor1.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                        String idd = cursor1.getString(cursor1.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID)); // 错误的--记得是[CONTACT_ID]
-        } finally {
-            cursor1.close();
         }
         if (number == null) {
             return;
@@ -563,6 +555,22 @@ public class CrimeFragment extends Fragment {
             updatePhotoView();
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent pickContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(pickContact, REQUEST_CONTACT);
+                } else {
+                    Toast.makeText(getContext(), "你拒绝读取联系人", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     public void onCheckedChange(boolean isChecked) {

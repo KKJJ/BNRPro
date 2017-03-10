@@ -1,68 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.nettest.MainActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_retrofit"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Test Retrofit"
-        android:textSize="20sp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.nettest.MainActivity">
 
-    <Button
-        android:id="@+id/btn_okhttp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Test okHttp"
-        android:textSize="20sp"/>
+        <Button
+            android:id="@+id/btn_retrofit"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test Retrofit"
+            android:textSize="20sp"/>
 
-    <Button
-        android:id="@+id/btn_percent"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Test percent"
-        android:textSize="20sp"/>
+        <Button
+            android:id="@+id/btn_okhttp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test okHttp"
+            android:textSize="20sp"/>
 
-    <Button
-        android:id="@+id/btn_arrayAdapter"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Test ArrayAdapter"
-        android:textSize="20sp"/>
+        <Button
+            android:id="@+id/btn_percent"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test percent"
+            android:textSize="20sp"/>
 
-    <Button
-        android:id="@+id/btn_staggeredLayoutManger"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Test SLayoutManager"
-        android:textSize="20sp"/>
+        <Button
+            android:id="@+id/btn_arrayAdapter"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test ArrayAdapter"
+            android:textSize="20sp"/>
 
-    <Button
-        android:id="@+id/btn_chatLayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="Test ChatLayout"
-        android:textSize="20sp"/>
+        <Button
+            android:id="@+id/btn_staggeredLayoutManger"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test SLayoutManager"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btn_testRequestPermission"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test RequestPermission"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btn_chatLayout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test ChatLayout"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btn_testProgressDialog"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test ProgressDialog"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btn_testBottomSheetDialog"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test BottomSheetDialog"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btn_testContentProvider"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test ContentProvider"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/btn_testContentProvider2"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test ContentProvider2"
+            android:textSize="20sp"/>
 
 
-    <AutoCompleteTextView
-        android:id="@+id/auto_ctv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:completionHint="222222222"
-        android:completionThreshold="1"
-        android:text="这是个什么"
-        android:textSize="20sp"
-        />
+        <AutoCompleteTextView
+            android:id="@+id/auto_ctv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionHint="222222222"
+            android:completionThreshold="1"
+            android:text="这是个什么"
+            android:textSize="20sp"
+            />
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
