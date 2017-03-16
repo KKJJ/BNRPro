@@ -1,1 +1,1 @@
-include ':app', ':criminalintent', ':camerademovn', ':beatBox', ':netTest', ':litepaldemo'
+include ':app', ':criminalintent', ':camerademovn', ':beatBox', ':netTest', ':litepaldemo', ':wzryzhangyb'

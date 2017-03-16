@@ -34,6 +34,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnBottomSheetDialog;
     private Button btnContentProvider;
     private Button btnContentProvider2;
+    private Button btnWebView;
     private AutoCompleteTextView mAutoCompleteTextView;
 
 
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnBottomSheetDialog = (Button) findViewById(R.id.btn_testBottomSheetDialog);
         btnContentProvider = (Button) findViewById(R.id.btn_testContentProvider);
         btnContentProvider2 = (Button) findViewById(R.id.btn_testContentProvider2);
+        btnWebView = (Button) findViewById(R.id.btn_testWebView);
         mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.auto_ctv);
 
         btnRetrofit.setOnClickListener(this);
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnBottomSheetDialog.setOnClickListener(this);
         btnContentProvider.setOnClickListener(this);
         btnContentProvider2.setOnClickListener(this);
+        btnWebView.setOnClickListener(this);
 
         String[] strs = {"aa", "aaa", "ab", "abc", "aac"};
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strs);
@@ -145,15 +149,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 sheetDialog.show();
 
                 break;
-            case R.id.btn_testContentProvider:
+            case R.id.btn_testContentProvider: // 读取电话簿
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_PERMISSION_CODE_READ_CONTACTS);
                 } else {
                     readContact();
                 }
                 break;
-            case R.id.btn_testContentProvider2:
+            case R.id.btn_testContentProvider2: // 自定义的 ContentProvider
                 startActivity(new Intent(this, ContentProviderActivity.class));
+                break;
+            case R.id.btn_testWebView: // 测试WebView加载纯html代码
+                startActivity(new Intent(this, WebViewActivity.class));
                 break;
             default:
                 break;
@@ -201,11 +208,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             call();
         }
+
     }
 
     private void call() {
         Intent intent = new Intent(Intent.ACTION_CALL);
         intent.setData(Uri.parse("tel:10086"));
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -336,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public interface RetrofitService {
-        @GET("query")
+        @POST("query")
         Call<Data> getData(@Query("type") String type, @Query("postid") String id);
     }
 

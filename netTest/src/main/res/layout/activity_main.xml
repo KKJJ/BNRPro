@@ -93,6 +93,13 @@
             android:text="Test ContentProvider2"
             android:textSize="20sp"/>
 
+        <Button
+            android:id="@+id/btn_testWebView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Test WebView"
+            android:textSize="20sp"/>
+
 
         <AutoCompleteTextView
             android:id="@+id/auto_ctv"
