@@ -2,7 +2,6 @@ package com.jkdev.wzryzhangyb;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.widget.TextView;
 
 import com.jkdev.wzryzhangyb.ui.fragment.first.FirstFragment;
 import com.jkdev.wzryzhangyb.ui.fragment.five.FiveFragment;
@@ -27,7 +26,6 @@ public class MainActivity extends SupportActivity {
     public static final int FIVE = 4;
     private SupportFragment[] mFragments = new SupportFragment[5];
 
-    private TextView mTextMessage;
     private BottomBar mBottomBar;
 
     @Override
@@ -58,16 +56,13 @@ public class MainActivity extends SupportActivity {
             mFragments[THIRD] = findFragment(ThirdFragment.class);
             mFragments[FOURTH] = findFragment(FourthFragment.class);
             mFragments[FIVE] = findFragment(FiveFragment.class);
-
         }
 
         initView();
-
     }
 
     private void initView() {
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         mBottomBar = (BottomBar) findViewById(R.id.bottomBar);
 
         mBottomBar

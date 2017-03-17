@@ -33,8 +33,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -344,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public interface RetrofitService {
-        @POST("query")
+        @GET("query")
         Call<Data> getData(@Query("type") String type, @Query("postid") String id);
     }
 
@@ -352,8 +352,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Retrofit retrofit = new Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        RetrofitService retrofitService = retrofit.create(RetrofitService.class);
-        Call<Data> call = retrofitService.getData(type, postid);
+        RetrofitInterface retrofitInterface = retrofit.create(RetrofitInterface.class);
+        Call<Data> call = retrofitInterface.retrofit(type, postid);
+        LogUtil.e(TAG, "--testRetrofit1: " + retrofit.baseUrl());
         call.enqueue(new Callback<Data>() {
             @Override
             public void onResponse(Call<Data> call, Response<Data> response) {
@@ -369,8 +370,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     interface RetrofitInterface {
-        @GET("query")
-        Call<Data> retrofit(@Query("type") String type, @Query("postid") String id);
+
+        @GET("query)")
+        Call<Data> retrofit(@Field("type") String type, @Field("postid") String id);
     }
 
 
