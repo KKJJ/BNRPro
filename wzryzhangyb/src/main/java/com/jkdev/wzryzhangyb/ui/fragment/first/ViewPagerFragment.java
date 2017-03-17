@@ -1,4 +1,4 @@
-package com.jkdev.wzryzhangyb.first;
+package com.jkdev.wzryzhangyb.ui.fragment.first;
 
 import me.yokeyword.fragmentation.SupportFragment;
 

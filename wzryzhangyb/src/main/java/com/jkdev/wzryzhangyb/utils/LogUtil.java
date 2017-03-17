@@ -7,17 +7,17 @@ import android.util.Log;
  */
 public class LogUtil {
 
-    public static final int VWEBOSE = 1;
+    public static final int VERBOSE = 1;
     public static final int DEBUG = 2;
     public static final int INFO = 3;
     public static final int WARN = 4;
     public static final int ERROR = 5;
     public static final int NOTHING = 6;
 
-    public static int level = VWEBOSE;
+    public static int level = VERBOSE;
 
     public static void v(String tag, String msg) {
-        if (level <= VWEBOSE) {
+        if (level <= VERBOSE) {
             if (msg == null || tag == null)
                 return;
             Log.v(tag, msg);

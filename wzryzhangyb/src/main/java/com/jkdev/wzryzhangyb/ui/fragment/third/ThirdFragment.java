@@ -1,4 +1,4 @@
-package com.jkdev.wzryzhangyb.first;
+package com.jkdev.wzryzhangyb.ui.fragment.third;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jkdev.wzryzhangyb.R;
+import com.jkdev.wzryzhangyb.ui.fragment.first.ViewPagerFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -14,11 +15,11 @@ import me.yokeyword.fragmentation.SupportFragment;
  * Created by Kuang on 2017/3/16.
  */
 
-public class FirstFragment extends SupportFragment {
+public class ThirdFragment extends SupportFragment {
 
-    public static FirstFragment newInstance() {
+    public static ThirdFragment newInstance() {
 
-        FirstFragment fragment = new FirstFragment();
+        ThirdFragment fragment = new ThirdFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -28,14 +29,14 @@ public class FirstFragment extends SupportFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first_layout, container, false);
+        View view = inflater.inflate(R.layout.fragment_third_layout, container, false);
 //        initView(savedInstanceState);
         return view;
     }
 
     private void initView(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            loadRootFragment(R.id.fl_first_container, ViewPagerFragment.newInstance());
+            loadRootFragment(R.id.fl_third_container, ViewPagerFragment.newInstance());
         }
 
     }
