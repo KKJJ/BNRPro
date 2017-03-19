@@ -5,4 +5,15 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorTabSelected">#E4CA7D</color>
     <color name="colorTabUnSelected">#1F8CC4</color>
+    <color name="actionbar_title_color">#131B2A</color>
+    <color name="tag_list_bg">#253247</color>
+    <color name="ad_list_bg">#DDDDDD</color>
+    <color name="b_2">#ffffffff</color>
+    <color name="t_2">#ffb1b1b1</color>
+    <color name="color_black">#000000</color>
+    <color name="color_title_2">#757575</color>
+    <color name="color_title1">#404040</color>
+    <color name="color_title_3">#AAAAAA</color>
+
+
 </resources>

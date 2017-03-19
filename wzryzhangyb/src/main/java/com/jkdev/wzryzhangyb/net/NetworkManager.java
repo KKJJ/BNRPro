@@ -59,22 +59,24 @@ public class NetworkManager {
 
     private HashMap getDataMap() {
         HashMap<String, String> hashMap = new HashMap<>();
-//        hashMap.put("api", "checksig.checkclock");
+//        hashMap.put("api", "tag.list");
         hashMap.put("apiVersion", "v1");
-        hashMap.put("deviceId", "SZi5StsLWDdWACOMA6fegtBFGYehxFqe01qEVyhi8A7KOAVLJUwl8e6H1ngMtAn77PKP/gseqF0AYdqcc+D8RQ==");
-        hashMap.put("game", "yxzj");
-        hashMap.put("nonce", "287908");
+        hashMap.put("platform", "android");
         hashMap.put("os", "android");
         hashMap.put("osVersion", "19");
-        hashMap.put("platform", "android");
-        hashMap.put("platformVersion", "106000");
-        hashMap.put("secretId", "AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA");
-        hashMap.put("secretSignature", "ZR1qGjWwyEYINOL+AJtbKtJBHFM=");
-        hashMap.put("secretVersion", "v1.0");
+        hashMap.put("secretSignature", "WCyK7cqJYEAXTt91+Iwvn5RpuX8=");
+        hashMap.put("params[alias]", "topic_category");
+        hashMap.put("game", "yxzj");
         hashMap.put("sign", "");
+        hashMap.put("platformVersion", "106000");
         hashMap.put("time", System.currentTimeMillis() + "");
-        hashMap.put("userId", "0");
+        hashMap.put("secretId", "AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA");
+        hashMap.put("nonce", "17492");
         hashMap.put("userToken", "");
+        hashMap.put("secretVersion", "v1.0");
+        hashMap.put("userId", "0");
+        hashMap.put("deviceId", "3R+vBETlhk12jq4ac88rWNLvFXITxyZxrbqa1SJvnoso+k5Qgx+chs1Z6xdNIHEvQHeL13Y7Kufs9gq1QmI1sQ==");
+
         return hashMap;
     }
 
