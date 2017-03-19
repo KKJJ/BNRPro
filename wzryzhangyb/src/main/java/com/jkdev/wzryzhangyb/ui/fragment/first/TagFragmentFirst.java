@@ -82,7 +82,6 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
         mCommonAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
             }
 
             @Override
@@ -107,7 +106,6 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
         });
         mLoadMoreWrapper.setLoadMoreView(mLoadMoreView); // 加载更多
         mRecyclerView.setAdapter(mLoadMoreWrapper);
-
 
     }
 
