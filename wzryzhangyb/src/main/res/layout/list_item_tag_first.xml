@@ -38,7 +38,7 @@
         android:lineSpacingExtra="2dp"
         android:text="这是title"
         android:textColor="@color/color_title1"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
             android:layout_weight="1"
             android:text="time"
             android:textColor="@color/color_title_3"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/tv_comment"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:text="comment"
             android:textColor="@color/color_title_3"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 

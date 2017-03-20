@@ -11,12 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.jkdev.wzryzhangyb.R;
 import com.jkdev.wzryzhangyb.bean.AdListDataBean;
 import com.jkdev.wzryzhangyb.bean.RecommendListDataBean;
+import com.jkdev.wzryzhangyb.constant.Constants;
 import com.jkdev.wzryzhangyb.event.StartBrotherEvent;
 import com.jkdev.wzryzhangyb.net.NetworkClient;
 import com.jkdev.wzryzhangyb.ui.fragment.first.adapter.AdListAdapter;
@@ -40,36 +40,36 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static android.R.attr.data;
-
 /**
- * Created by KJ on 2017/3/18.
+ * Created by KJ on 2017/3/20.
  */
 
-public class TagFragmentFirst extends SupportFragment implements View.OnClickListener {
+public class TagFragmentOther extends SupportFragment {
 
-    private static final String TAG = "--TagFragmentFirst";
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private static final String TAG = "--TagFragmentOther";
+    private static final String TAG_ID = "TAG_ID";
+    private int tagIdFlag;
     private RollPagerView mRollPagerView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private CommonAdapter mCommonAdapter;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
     private LoadMoreWrapper mLoadMoreWrapper;
     private View mHeaderView;
     private View mLoadMoreView;
-    private ImageView mImageViewFour1;
-    private ImageView mImageViewFour2;
-    private ImageView mImageViewFour3;
-    private ImageView mImageViewFour4;
     private List<RecommendListDataBean.DataEntity> dataList;
     private List<AdListDataBean.DataEntity.ListEntity> adList;
     private NetworkClient mNetworkClient;
     private Gson mGson;
     private SharePreferenceUtil mSharePreferenceUtil;
+    private int[] tagIds = {5, 4, 3, 2, 98};
+    private int tagId;
 
-    public static TagFragmentFirst newInstance() {
-        TagFragmentFirst fragment = new TagFragmentFirst();
+    public static TagFragmentOther newInstance(int tId) {
+
+        TagFragmentOther fragment = new TagFragmentOther();
         Bundle args = new Bundle();
+        args.putInt(TAG_ID, tId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -78,28 +78,25 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.tag_fragment_first, container, false);
-        mHeaderView = inflater.inflate(R.layout.list_view_header_first, container, false);
+        mHeaderView = inflater.inflate(R.layout.list_view_header_other, container, false);
         mLoadMoreView = inflater.inflate(R.layout.listview_footer_layout, container, false);
         mNetworkClient = NetworkClient.getInstance(); // 初始网络manager
-        mGson = new Gson();
         mSharePreferenceUtil = SharePreferenceUtil.getInstance();
+        mGson = new Gson();
         initView(view);
         return view;
     }
 
-    private void initView(View view) {
-
-        initHeaderView(); // 初始头部
-        initRecommendRecycleView(view); // 初始列表数据
-
-    }
-
     /**
-     * 初始列表数据
+     * 初始化控件
      *
      * @param view
      */
-    private void initRecommendRecycleView(View view) {
+    private void initView(View view) {
+
+        initHeaderView();
+        tagIdFlag = getArguments().getInt(TAG_ID);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_tag_first);
@@ -107,29 +104,28 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL_LIST));
 
-        String recommendListDataString = mSharePreferenceUtil.getRecommendListData(); // 拿缓存数据
-        if (TextUtils.isEmpty(recommendListDataString)) { // 没本地数据 联网请求
-            getRecommendDataFromNet(true);
+        tagId = tagIds[tagIdFlag];
+        String tagListDataString = mSharePreferenceUtil.getTagListData(Constants.TAG_LIST_DATA + tagId); // 拿缓存数据
+        if (TextUtils.isEmpty(tagListDataString)) { // 没本地数据 联网请求
+            getTagListDataFromNet(tagId, true);
         } else {
-            dataList = new Gson().fromJson(recommendListDataString, RecommendListDataBean.class).getData();
-            setRvAdapter(true);
+            dataList = new Gson().fromJson(tagListDataString, RecommendListDataBean.class).getData();
+            setAdapter(true); // 设置各种适配器
         }
     }
 
     /**
-     * 网络请求recommend列表数据
-     *
      * @param isInit : 是不是初始请求  即与刷新区分
      */
-    private void getRecommendDataFromNet(final boolean isInit) {
-        mNetworkClient.getRecommendListData(new Callback<String>() {
+    private void getTagListDataFromNet(final int tagId, final boolean isInit) {
+        mNetworkClient.getTagListData(tagId, new Callback<String>() {
 
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 String responseData = response.body().toString();
-                mSharePreferenceUtil.setRecommendListData(responseData); // 缓存本地
+                mSharePreferenceUtil.setTagListData(Constants.TAG_LIST_DATA + tagId, responseData);// 缓存本地
                 dataList = mGson.fromJson(responseData, RecommendListDataBean.class).getData();
-                setRvAdapter(isInit);
+                setAdapter(isInit);
             }
 
             @Override
@@ -140,21 +136,21 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
     }
 
     /**
-     * 初始Adapter并设置
+     * 设置各种适配器
+     *
+     * @param isInit
      */
-    private void setRvAdapter(boolean isInit) {
+    private void setAdapter(boolean isInit) {
+        Log.d(TAG, "setAdapter: init: " + isInit);
         if (isInit) {
-            Log.d(TAG, "setRvAdapter: 请求数据");
             mCommonAdapter = new ListAdapterTagFirst(getContext(), R.layout.list_item_tag_first, dataList);
             mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mCommonAdapter);
             mHeaderAndFooterWrapper.addHeaderView(mHeaderView); // 头部
             mLoadMoreWrapper = new LoadMoreWrapper(mHeaderAndFooterWrapper);
-
             mLoadMoreWrapper.setLoadMoreView(mLoadMoreView); // 加载更多
             mRecyclerView.setAdapter(mLoadMoreWrapper);
-            setListener(); // 设置监听
+            setListener(dataList); // 设置各种监听
         } else {
-            Log.d(TAG, "setRvAdapter: 刷新数据");
             mLoadMoreWrapper.notifyDataSetChanged();
             mSwipeRefreshLayout.setRefreshing(false);
         }
@@ -162,16 +158,14 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
 
     /**
      * 设置监听
+     *
+     * @param dataList
      */
-    private void setListener() {
+    private void setListener(final List<RecommendListDataBean.DataEntity> dataList) {
         mCommonAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Log.e(TAG, "onItemClick: 点击了" + position);
-                EventBus.getDefault().post(
-                        new StartBrotherEvent(
-                                NewsContentFragment.getInstance(
-                                        dataList.get(position - 1).getId()))); // 因为列表有header 所以减1
+                EventBus.getDefault().post(new StartBrotherEvent(NewsContentFragment.getInstance(dataList.get(position).getId())));
             }
 
             @Override
@@ -194,7 +188,7 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getRecommendDataFromNet(false);
+                getTagListDataFromNet(tagId, false);
             }
         });
     }
@@ -204,16 +198,10 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
      */
     private void initHeaderView() {
         mRollPagerView = (RollPagerView) mHeaderView.findViewById(R.id.roll_viewpager);
-        mImageViewFour1 = (ImageView) mHeaderView.findViewById(R.id.img_four_1);
-        mImageViewFour2 = (ImageView) mHeaderView.findViewById(R.id.img_four_2);
-        mImageViewFour3 = (ImageView) mHeaderView.findViewById(R.id.img_four_3);
-        mImageViewFour4 = (ImageView) mHeaderView.findViewById(R.id.img_four_4);
-
         String adListData = SharePreferenceUtil.getInstance().getAdListData(); // 拿缓存数据
         if (TextUtils.isEmpty(adListData)) {
             getAdListData();
         } else {
-            Log.d(TAG, "initHeaderView: adList缓存 ： " + adListData);
             AdListDataBean adListDataBean = new Gson().fromJson(adListData, AdListDataBean.class);
             adList = adListDataBean.getData().getList();
             mRollPagerView.setAdapter(new AdListAdapter(adList));
@@ -227,10 +215,6 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
                                         adList.get(position).getRedirect_data()))); //
             }
         });
-        mImageViewFour1.setOnClickListener(this);
-        mImageViewFour2.setOnClickListener(this);
-        mImageViewFour3.setOnClickListener(this);
-        mImageViewFour4.setOnClickListener(this);
     }
 
     /**
@@ -242,36 +226,16 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 String responseData = response.body().toString();
-                Log.i(TAG, "getAdListData onResponse: " + data);
-                mSharePreferenceUtil.setAdListData(responseData); // 缓存到本地
-
-                AdListDataBean adListDataBean = mGson.fromJson(responseData, AdListDataBean.class);
+                SharePreferenceUtil.getInstance().setAdListData(responseData); // 缓存
+                AdListDataBean adListDataBean = new Gson().fromJson(responseData, AdListDataBean.class);
                 adList = adListDataBean.getData().getList();
                 mRollPagerView.setAdapter(new AdListAdapter(adList));
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                LogUtil.e(TAG, "getAdListData onFailure: " + t.getMessage());
+                LogUtil.e(TAG, "onFailure: " + t.getMessage());
             }
         });
     }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.img_four_1:
-                break;
-            case R.id.img_four_2:
-                break;
-            case R.id.img_four_3:
-                break;
-            case R.id.img_four_4:
-                break;
-            default:
-                break;
-        }
-    }
-
-
 }

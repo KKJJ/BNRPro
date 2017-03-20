@@ -5,10 +5,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.jkdev.wzryzhangyb.MyApplication;
 import com.jkdev.wzryzhangyb.bean.AdListDataBean;
-import com.jkdev.wzryzhangyb.constant.NetConstant;
 import com.jude.rollviewpager.adapter.StaticPagerAdapter;
 
 import java.util.List;
@@ -22,9 +20,8 @@ public class AdListAdapter extends StaticPagerAdapter {
 
     private List<AdListDataBean.DataEntity.ListEntity> list;
 
-    public AdListAdapter() {
-        AdListDataBean listDataBean = new Gson().fromJson(NetConstant.ad_list_data, AdListDataBean.class);
-        list = listDataBean.getData().getList();
+    public AdListAdapter(List<AdListDataBean.DataEntity.ListEntity> list) {
+        this.list = list;
     }
 
     @Override

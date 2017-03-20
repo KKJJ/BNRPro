@@ -5,19 +5,19 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.jkdev.wzryzhangyb.R;
-import com.jkdev.wzryzhangyb.ui.fragment.first.adapter.TagViewPagerAdapter;
 import com.jkdev.wzryzhangyb.bean.TagListBean;
 import com.jkdev.wzryzhangyb.constant.NetConstant;
+import com.jkdev.wzryzhangyb.event.StartBrotherEvent;
 import com.jkdev.wzryzhangyb.net.NetworkManager;
 import com.jkdev.wzryzhangyb.net.RetrofitInterface;
-import com.jkdev.wzryzhangyb.ui.fragment.second.SecondFragment;
+import com.jkdev.wzryzhangyb.ui.fragment.first.adapter.TagViewPagerAdapter;
 import com.jkdev.wzryzhangyb.ui.view.MySimplePagerTitleView;
 import com.jkdev.wzryzhangyb.utils.LogUtil;
 
@@ -28,6 +28,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNav
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.WrapPagerIndicator;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,12 +49,12 @@ import static android.content.ContentValues.TAG;
 public class FirstFragment extends SupportFragment {
 
     private NetworkManager networkManager;
-    private Toolbar mToolbar;
     private MagicIndicator magicIndicator;
     private ViewPager mViewPager;
     private List<TagListBean.DataEntity> mTagList;
     private TagViewPagerAdapter adapter;
     private ArrayList<SupportFragment> supportFragments;
+    private ImageView btnSearch;
 
     public static FirstFragment newInstance() {
 
@@ -72,16 +74,20 @@ public class FirstFragment extends SupportFragment {
     }
 
     private void initView(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.first_toolbar);
-        mToolbar.setLogo(R.drawable.home_recommend_p);
-        mToolbar.setTitle(R.string.first_toolbar_title);
 
+        btnSearch = (ImageView) view.findViewById(R.id.btn_search_tag_first);
         magicIndicator = (MagicIndicator) view.findViewById(R.id.magic_indicator);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
         mTagList = new ArrayList<>();
         supportFragments = new ArrayList<>();
         adapter = new TagViewPagerAdapter(getFragmentManager(), supportFragments);
 
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new StartBrotherEvent(SearchFragment.newInstance()));
+            }
+        });
 
         initMagicIndicator(); // 初始化指示器
 
@@ -93,7 +99,7 @@ public class FirstFragment extends SupportFragment {
         super.onLazyInitView(savedInstanceState);
 
         initTagData();
-
+//        askNet(); ///// 测试
     }
 
     /**
@@ -102,11 +108,13 @@ public class FirstFragment extends SupportFragment {
     private void initTagData() {
         TagListBean tagListBean = new Gson().fromJson(NetConstant.tag_list_data, TagListBean.class);
         mTagList = tagListBean.getData();
-        supportFragments.add(new TagFragmentFirst());
-        for (int i = 1; i < mTagList.size(); i++) {
-            supportFragments.add(new SecondFragment());
+        supportFragments.add(TagFragmentFirst.newInstance());
+        for (int i = 0; i < mTagList.size() - 1; i++) {
+            supportFragments.add(TagFragmentOther.newInstance(i));
         }
+        mViewPager.setOffscreenPageLimit(0); // 取消预加载没起作用
         mViewPager.setAdapter(adapter);
+
         magicIndicator.getNavigator().notifyDataSetChanged();
 
     }
@@ -116,13 +124,14 @@ public class FirstFragment extends SupportFragment {
      */
     private void askNet() {
         RetrofitInterface retrofitInterface = networkManager.create(RetrofitInterface.class);
-        HashMap map = networkManager.putParam(NetConstant.checkclock);
+        HashMap map = networkManager.putParam(NetConstant.tag_list);
+        map.put("params[alias]", "topic_category");
         Call<String> call = retrofitInterface.getData(map);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                LogUtil.e(TAG, "onResponse: " + response.body().toString());
-                initTagData();
+                LogUtil.e(TAG, "askNet onResponse: " + response.body().toString());
+//                initTagData();
             }
 
             @Override

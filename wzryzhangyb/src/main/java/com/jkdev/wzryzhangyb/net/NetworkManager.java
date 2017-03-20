@@ -30,7 +30,6 @@ public class NetworkManager {
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
     }
 
     public <T> T create(Class<T> clazz) {

@@ -27,12 +27,13 @@ public class WebViewActivity extends AppCompatActivity {
 //            mWebView.loadData(URLEncoder.encode(webData, encoding), mimeType, encoding); // 不支持图片
 
         // 原内容img src经过base64编码，不能显示 ，此处将其转换为原始图片地址
-        htmlDataImg = replaceDataSrc(htmlDataImg);  // 图片展示类型
-        mWebView.loadDataWithBaseURL(null, htmlDataImg, mimeType, encoding, null);
+//        htmlDataImg = replaceDataSrc(htmlDataImg);  // 图片展示类型
+//        mWebView.loadDataWithBaseURL(null, htmlDataImg, mimeType, encoding, null);
 
 
-////        htmlDataVideo = replaceDataSrc(htmlDataVideo);  // 视频类型
-//        mWebView.loadDataWithBaseURL(null, htmlDataVideo, mimeType, encoding, null);
+//        htmlDataVideo = replaceDataSrc(htmlDataVideo);  // 视频类型
+//        content = content.replace("src=\"data:image/gif;base64", "src=\"" + cover_url + "\" aaa=\"data:image/gif;base64");
+        mWebView.loadDataWithBaseURL(null, htmlDataVideo, mimeType, encoding, null);
 
     }
 
@@ -140,7 +141,7 @@ public class WebViewActivity extends AppCompatActivity {
             "    <link type=\"text/css\" rel=\"stylesheet\" href=\"http://static.zhangyoubao.com/zyb_app/webview/css/news.css\">\n" +
             "</head>\n" +
             "<body>\n" +
-            "<div class=\"wrap\"><p><img class=\"placeholder ke-video\"  options=\"size=125x125\" src=\"http://avatar.zhangyoubao.com/yxzj/topic_cover/e6f/0ac/0ef/5e8JKxATw.jpg\" data-src=\"http://static.zhangyoubao.com/public/img/video.png\" width=\"308\" height=\"210\" data-type=\"video\" data-id=\"4221\"></p><div style=\"text-align: left;margin-top: 20px;text-align: justify;\"><p class=\"disclaimer_bottom_class\" style=\"font-size: 13px !important;color:#999cad;line-height: 18px !important;\">掌游宝刊登此文目的是为了传递更多信息，并不意味着赞同其观点或证实其描述。版权归原作者所有，如有侵权请联系我们删除。</p></div></div>\n" +
+            "<div class=\"wrap\"><p><img class=\"placeholder ke-video\"  options=\"size=125x125\" src=\"data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==\" data-src=\"http://static.zhangyoubao.com/public/img/video.png\" width=\"308\" height=\"210\" data-type=\"video\" data-id=\"4281\"></p><div style=\"text-align: left;margin-top: 20px;text-align: justify;\"><p class=\"disclaimer_bottom_class\" style=\"font-size: 13px !important;color:#999cad;line-height: 18px !important;\">掌游宝刊登此文目的是为了传递更多信息，并不意味着赞同其观点或证实其描述。版权归原作者所有，如有侵权请联系我们删除。</p></div></div>\n" +
             "<script>\n" +
             "    //判断是否来自电竞掌游宝(1为来自电竞掌游宝)\n" +
             "    var isCommunity = 0;\n" +
@@ -154,12 +155,14 @@ public class WebViewActivity extends AppCompatActivity {
             "    //是否为省流量模式\n" +
             "    var isSave = 0;\n" +
             "    //视频相关信息\n" +
-            "    var videoTimeList = {\"4221\":{\"is_live\":\"0\",\"time\":\"707.50\",\"from\":\"\\u817e\\u8baf\",\"cover\":\"http:\\/\\/avatar.zhangyoubao.com\\/yxzj\\/video_cover\\/7a8\\/0c0\\/46b\\/a5c_tohvz.png\",\"source_url\":\"https:\\/\\/v.qq.com\\/x\\/page\\/p03839vna0l.html\"}};\n" +
+            "    var videoTimeList = {\"4281\":{\"is_live\":\"0\",\"time\":\"412.00\",\"from\":\"\\u672a\\u77e5\",\"cover\":\"http:\\/\\/avatar.zhangyoubao.com\\/yxzj\\/video_cover\\/66a\\/1a7\\/7ab\\/e00SKxsWG.jpg\",\"source_url\":\"http:\\/\\/www.bilibili.com\\/video\\/av9280659\\/?from=search&seid=12680540182880405242\"}};\n" +
             "    //分享信息\n" +
-            "    var shareInfo = {\"share_title\":\"[\\u5367\\u9f99]\\u975eBAN\\u5fc5\\u9009\\u6768\\u622c\",\"share_title_long\":\"\",\"share_desc\":\"\\u638c\\u6e38\\u5b9d\\u520a\\u767b\\u6b64\\u6587\\u76ee\\u7684\\u662f\\u4e3a\\u4e86\\u4f20\\u9012\\u66f4\\u591a\\u4fe1\\u606f\\uff0c\\u5e76\\u4e0d\\u610f\\u5473\\u7740\\u8d5e\\u540c\\u5176\\u89c2\\u70b9\\u6216\\u8bc1\\u5b9e\\u5176\\u63cf\\u8ff0\\u3002\\u7248\\u6743\\u5f52\\u539f\\u4f5c\\u8005\\u6240\\u6709\\uff0c\\u5982\\u6709\\u4fb5\\u6743\\u8bf7\\u8054\\u7cfb\\u6211\\u4eec\\u5220\\u9664\\u3002\",\"share_url\":\"http:\\/\\/m.zhangyoubao.com\\/yxzj\\/detail\\/3123621281773629056?source=shareout\",\"share_img\":\"http:\\/\\/avatar.zhangyoubao.com\\/yxzj\\/topic_cover\\/e6f\\/0ac\\/0ef\\/5e8JKxATw.jpg\"};\n" +
+            "    var shareInfo = {\"share_title\":\"[FA\\u4e3b\\u64ad\\u7c97\\u4e8b\\u4e86]\\u55e8\\u6c0f\\u55e8\\u8fc7\\u5934\\uff01\\u6b22\\u58f0\\u7b11\\u8bed\\u4e2d\\u6253\\u51faGG\",\"share_title_long\":\"\",\"share_desc\":\"\\u738b\\u8005\\u7bc704\",\"share_url\":\"http:\\/\\/m.zhangyoubao.com\\/yxzj\\/detail\\/3124766533504969473?source=shareout\",\"share_img\":\"http:\\/\\/avatar.zhangyoubao.com\\/yxzj\\/topic_cover\\/37e\\/093\\/67b\\/64d16wvh1.jpg\"};\n" +
             "    //当前游戏别称\n" +
             "    var game = \"yxzj\";\n" +
+            "    //是否编译完成\n" +
             "    var hasRendered = false;\n" +
+            "    //webapp地址\n" +
             "    var webappUrl = \"http://m.zhangyoubao.com/\";\n" +
             "</script>\n" +
             "<script src=\"http://static.zhangyoubao.com/zyb_app/common/js/zepto.min.js\"></script>\n" +

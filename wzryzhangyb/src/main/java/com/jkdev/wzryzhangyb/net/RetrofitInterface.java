@@ -13,7 +13,6 @@ import retrofit2.http.POST;
 
 public interface RetrofitInterface {
 
-
     @FormUrlEncoded
     @POST("service/rest")
     Call<String> getData(@FieldMap Map<String, String> map);
