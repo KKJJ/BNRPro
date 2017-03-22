@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.jkdev.wzryzhangyb.R;
@@ -33,6 +34,7 @@ import com.zhy.adapter.recyclerview.wrapper.LoadMoreWrapper;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.yokeyword.fragmentation.SupportFragment;
@@ -57,13 +59,16 @@ public class TagFragmentOther extends SupportFragment {
     private LoadMoreWrapper mLoadMoreWrapper;
     private View mHeaderView;
     private View mLoadMoreView;
-    private List<RecommendListDataBean.DataEntity> dataList;
-    private List<AdListDataBean.DataEntity.ListEntity> adList;
+    private List<RecommendListDataBean.DataEntity> mDataList;
+    private List<AdListDataBean.DataEntity.ListEntity> mAdList;
     private NetworkClient mNetworkClient;
     private Gson mGson;
     private SharePreferenceUtil mSharePreferenceUtil;
-    private int[] tagIds = {5, 4, 3, 2, 98};
-    private int tagId;
+    private int[] mTagIds = {5, 4, 3, 2, 98};
+    private int mTagId;
+    private boolean mNeedToLoad = true; // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下 这是是否刷新标志
+    private AdListAdapter mAdListAdapter;
+
 
     public static TagFragmentOther newInstance(int tId) {
 
@@ -83,6 +88,8 @@ public class TagFragmentOther extends SupportFragment {
         mNetworkClient = NetworkClient.getInstance(); // 初始网络manager
         mSharePreferenceUtil = SharePreferenceUtil.getInstance();
         mGson = new Gson();
+        mDataList = new ArrayList<>();
+        mAdList = new ArrayList<>();
         initView(view);
         return view;
     }
@@ -104,68 +111,80 @@ public class TagFragmentOther extends SupportFragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL_LIST));
 
-        tagId = tagIds[tagIdFlag];
-        String tagListDataString = mSharePreferenceUtil.getTagListData(Constants.TAG_LIST_DATA + tagId); // 拿缓存数据
+        initRvAdapter(); //
+
+        mTagId = mTagIds[tagIdFlag];
+        String tagListDataString = mSharePreferenceUtil.getTagListData(Constants.TAG_LIST_DATA + mTagId); // 拿缓存数据
         if (TextUtils.isEmpty(tagListDataString)) { // 没本地数据 联网请求
-            getTagListDataFromNet(tagId, true);
+            getTagListDataFromNet(mTagId);
         } else {
-            dataList = new Gson().fromJson(tagListDataString, RecommendListDataBean.class).getData();
-            setAdapter(true); // 设置各种适配器
+            List<RecommendListDataBean.DataEntity> localDataList = new Gson().fromJson(tagListDataString, RecommendListDataBean.class).getData();
+            mDataList.addAll(localDataList);
+            notifyRvAdapter();
         }
     }
 
     /**
-     * @param isInit : 是不是初始请求  即与刷新区分
+     * 网络请求列表数据
      */
-    private void getTagListDataFromNet(final int tagId, final boolean isInit) {
+    private void getTagListDataFromNet(final int tagId) {
         mNetworkClient.getTagListData(tagId, new Callback<String>() {
 
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
+
                 String responseData = response.body().toString();
                 mSharePreferenceUtil.setTagListData(Constants.TAG_LIST_DATA + tagId, responseData);// 缓存本地
-                dataList = mGson.fromJson(responseData, RecommendListDataBean.class).getData();
-                setAdapter(isInit);
+                mDataList.clear(); // 先清空数据
+                mNeedToLoad = true; // 刷新后置为true
+                List<RecommendListDataBean.DataEntity> netDataList = mGson.fromJson(responseData, RecommendListDataBean.class).getData();
+                mDataList.addAll(netDataList); //
+                notifyRvAdapter();
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                LogUtil.e(TAG, "getRecommendDataFromNet onFailure: " + t.getMessage());
+                LogUtil.e(TAG, "getTagListDataFromNet onFailure: " + t.getMessage());
             }
         });
     }
 
     /**
-     * 设置各种适配器
-     *
-     * @param isInit
+     * 初始Adapter并设置
      */
-    private void setAdapter(boolean isInit) {
-        Log.d(TAG, "setAdapter: init: " + isInit);
-        if (isInit) {
-            mCommonAdapter = new ListAdapterTagFirst(getContext(), R.layout.list_item_tag_first, dataList);
-            mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mCommonAdapter);
-            mHeaderAndFooterWrapper.addHeaderView(mHeaderView); // 头部
-            mLoadMoreWrapper = new LoadMoreWrapper(mHeaderAndFooterWrapper);
-            mLoadMoreWrapper.setLoadMoreView(mLoadMoreView); // 加载更多
-            mRecyclerView.setAdapter(mLoadMoreWrapper);
-            setListener(dataList); // 设置各种监听
-        } else {
-            mLoadMoreWrapper.notifyDataSetChanged();
+    private void initRvAdapter() {
+
+        Log.d(TAG, "setRvAdapter: 组装adapter");
+        mCommonAdapter = new ListAdapterTagFirst(getContext(), R.layout.list_item_tag_first, mDataList);
+        mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mCommonAdapter);
+        mHeaderAndFooterWrapper.addHeaderView(mHeaderView); // 头部
+        mLoadMoreWrapper = new LoadMoreWrapper(mHeaderAndFooterWrapper);
+
+        mLoadMoreWrapper.setLoadMoreView(mLoadMoreView); // 加载更多
+        mRecyclerView.setAdapter(mLoadMoreWrapper);
+        setListener(); // 设置监听
+
+    }
+
+    /**
+     * 刷新列表数据
+     */
+    private void notifyRvAdapter() {
+        Log.d(TAG, "setRvAdapter: 刷新数据");
+        mLoadMoreWrapper.notifyDataSetChanged();
+        if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
     /**
      * 设置监听
-     *
-     * @param dataList
      */
-    private void setListener(final List<RecommendListDataBean.DataEntity> dataList) {
+    private void setListener() {
         mCommonAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                EventBus.getDefault().post(new StartBrotherEvent(NewsContentFragment.getInstance(dataList.get(position).getId())));
+                EventBus.getDefault().post(new StartBrotherEvent(NewsContentFragment.getInstance(mDataList.get(position).getId())));
             }
 
             @Override
@@ -179,7 +198,7 @@ public class TagFragmentOther extends SupportFragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        dataList.addAll(dataList);
+                        mDataList.addAll(mDataList);
                         mLoadMoreWrapper.notifyDataSetChanged();
                     }
                 }, 1500);
@@ -188,7 +207,22 @@ public class TagFragmentOther extends SupportFragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getTagListDataFromNet(tagId, false);
+                getTagListDataFromNet(mTagId);
+            }
+        });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (mNeedToLoad && mAdListAdapter != null) {
+                    mAdListAdapter.notifyDataSetChanged(); // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下
+                    mNeedToLoad = false;
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
     }
@@ -198,21 +232,30 @@ public class TagFragmentOther extends SupportFragment {
      */
     private void initHeaderView() {
         mRollPagerView = (RollPagerView) mHeaderView.findViewById(R.id.roll_viewpager);
+
+        mAdListAdapter = new AdListAdapter(mAdList);
+        mRollPagerView.setAdapter(mAdListAdapter);
+
         String adListData = SharePreferenceUtil.getInstance().getAdListData(); // 拿缓存数据
+
         if (TextUtils.isEmpty(adListData)) {
             getAdListData();
         } else {
-            AdListDataBean adListDataBean = new Gson().fromJson(adListData, AdListDataBean.class);
-            adList = adListDataBean.getData().getList();
-            mRollPagerView.setAdapter(new AdListAdapter(adList));
+            List<AdListDataBean.DataEntity.ListEntity> entityList = new Gson().fromJson(adListData, AdListDataBean.class).getData().getList();
+            mAdList.addAll(entityList);
+            mAdListAdapter.notifyDataSetChanged();
         }
         mRollPagerView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+                if (position == 4) { ////////////////////////////////////////
+                    Toast.makeText(_mActivity, "这个还没做", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 EventBus.getDefault().post(
                         new StartBrotherEvent(
                                 NewsContentFragment.getInstance(
-                                        adList.get(position).getRedirect_data()))); //
+                                        mAdList.get(position).getRedirect_data()))); //
             }
         });
     }
@@ -227,9 +270,10 @@ public class TagFragmentOther extends SupportFragment {
             public void onResponse(Call<String> call, Response<String> response) {
                 String responseData = response.body().toString();
                 SharePreferenceUtil.getInstance().setAdListData(responseData); // 缓存
-                AdListDataBean adListDataBean = new Gson().fromJson(responseData, AdListDataBean.class);
-                adList = adListDataBean.getData().getList();
-                mRollPagerView.setAdapter(new AdListAdapter(adList));
+                List<AdListDataBean.DataEntity.ListEntity> entityList = mGson.fromJson(responseData, AdListDataBean.class).getData().getList();
+                mAdList.addAll(entityList);
+                mAdListAdapter.notifyDataSetChanged();
+                mAdListAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -238,4 +282,5 @@ public class TagFragmentOther extends SupportFragment {
             }
         });
     }
+
 }

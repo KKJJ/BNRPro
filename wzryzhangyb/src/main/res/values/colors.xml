@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorTabSelected">#E4CA7D</color>
     <color name="colorTabUnSelected">#1F8CC4</color>
-    <color name="actionbar_title_color">#131B2A</color>
+    <color name="actionbar_bg_color">#131B2A</color>
     <color name="actionbar_text_color">#E6CD80</color>
     <color name="tag_list_bg">#253247</color>
     <color name="ad_list_bg">#DDDDDD</color>
@@ -15,9 +15,11 @@
     <color name="color_title_2">#757575</color>
     <color name="color_title1">#404040</color>
     <color name="color_title_3">#AAAAAA</color>
+    <color name="color_title_4">#BBBBBB</color>
     <color name="color_white">#FFFFFF</color>
     <color name="color_search_text_hint">#98999B</color>
     <color name="color_searh_et_line">#253047</color>
+    <color name="color_top_tab_title">#F6E89A</color>
 
 
 </resources>

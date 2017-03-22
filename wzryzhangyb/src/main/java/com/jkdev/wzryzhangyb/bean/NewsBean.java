@@ -53,6 +53,51 @@ public class NewsBean {
     }
 
     public static class DataEntity {
+        @Override
+        public String toString() {
+            return "DataEntity{" +
+                    "id='" + id + '\'' +
+                    ", post_id='" + post_id + '\'' +
+                    ", user_id='" + user_id + '\'' +
+                    ", user_name='" + user_name + '\'' +
+                    ", avatar_url='" + avatar_url + '\'' +
+                    ", certification_title=" + certification_title +
+                    ", certification_describes='" + certification_describes + '\'' +
+                    ", publish_time='" + publish_time + '\'' +
+                    ", reply_time='" + reply_time + '\'' +
+                    ", create_time='" + create_time + '\'' +
+                    ", update_time='" + update_time + '\'' +
+                    ", type='" + type + '\'' +
+                    ", author='" + author + '\'' +
+                    ", is_fav='" + is_fav + '\'' +
+                    ", is_up='" + is_up + '\'' +
+                    ", is_down='" + is_down + '\'' +
+                    ", has_video='" + has_video + '\'' +
+                    ", is_lock='" + is_lock + '\'' +
+                    ", sticky_type='" + sticky_type + '\'' +
+                    ", essence_type='" + essence_type + '\'' +
+                    ", is_editor='" + is_editor + '\'' +
+                    ", status='" + status + '\'' +
+                    ", title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    ", content='" + content + '\'' +
+                    ", good_count='" + good_count + '\'' +
+                    ", down_count='" + down_count + '\'' +
+                    ", comment_count=" + comment_count +
+                    ", image_count='" + image_count + '\'' +
+                    ", cover_url='" + cover_url + '\'' +
+                    ", pv_count='" + pv_count + '\'' +
+                    ", author_detail=" + author_detail +
+                    ", is_third='" + is_third + '\'' +
+                    ", third_url='" + third_url + '\'' +
+                    ", title_long='" + title_long + '\'' +
+                    ", share_url='" + share_url + '\'' +
+                    ", userLogoFrameId=" + userLogoFrameId +
+                    ", image_urls=" + image_urls +
+                    ", videos=" + videos +
+                    '}';
+        }
+
         /**
          * id : 3124269987686494157
          * post_id : 3124269987690688462

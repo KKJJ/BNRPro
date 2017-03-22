@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/list_item_padding"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="@string/check_friends"
+        android:textColor="@color/color_title_4"
+        android:textSize="17sp"/>
+
+    <Button
+        android:id="@+id/btn_to_login"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:layout_alignLeft="@id/tv_message"
+        android:layout_alignRight="@id/tv_message"
+        android:layout_below="@id/tv_message"
+        android:background="#FAB700"
+        android:text="点击登录"
+        android:textColor="@color/color_white"
+        android:textSize="16sp"/>
+
+
+</RelativeLayout>

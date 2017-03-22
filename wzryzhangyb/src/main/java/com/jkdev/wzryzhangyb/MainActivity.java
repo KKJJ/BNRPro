@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.jkdev.wzryzhangyb.ui.fragment.MainFragment;
 
 import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
 
 public class MainActivity extends SupportActivity {
@@ -42,5 +43,10 @@ public class MainActivity extends SupportActivity {
     // 再点一次退出程序时间设置
     private static final long WAIT_TIME = 2000L;
     private long TOUCH_TIME = 0;
+
+    @Override
+    protected FragmentAnimator onCreateFragmentAnimator() {
+        return new FragmentAnimator(R.anim.anim_right_in, R.anim.alpha_scale_exit);
+    }
 
 }

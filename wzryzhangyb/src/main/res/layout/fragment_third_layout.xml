@@ -1,17 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/fl_third_container"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
+        android:background="@drawable/bg_titlebar"
         android:gravity="center"
-        android:text="Third "
-        android:textSize="20sp"/>
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="2dp">
 
-</FrameLayout>
+            <TextView
+                android:id="@+id/tv_tab_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tab_left_selector"
+                android:gravity="center"
+                android:text="热门"
+                android:textColor="@color/color_top_tab_title"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tv_tab_now"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tab_middle_selector"
+                android:gravity="center"
+                android:text="此刻"
+                android:textColor="@color/color_top_tab_title"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/tv_tab_attention"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tab_right_selector"
+                android:gravity="center"
+                android:text="关注"
+                android:textColor="@color/color_top_tab_title"
+                android:textSize="18sp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_send_tag4"
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btn_send_selector"/>
+
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0ff">
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

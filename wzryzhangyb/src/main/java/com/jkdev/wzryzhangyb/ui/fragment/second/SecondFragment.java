@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jkdev.wzryzhangyb.R;
-import com.jkdev.wzryzhangyb.ui.fragment.first.ViewPagerFragment;
 
 import me.yokeyword.fragmentation.SupportFragment;
 
@@ -17,11 +16,12 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public class SecondFragment extends SupportFragment {
 
-    public static SecondFragment newInstance() {
+    private static final String TAG = "--SecondFragment";
 
+
+    public static SecondFragment newInstance() {
         SecondFragment fragment = new SecondFragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -30,14 +30,12 @@ public class SecondFragment extends SupportFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_second_layout, container, false);
-//        initView(savedInstanceState);
+
+        initView(view);
         return view;
     }
 
-    private void initView(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            loadRootFragment(R.id.fl_second_container, ViewPagerFragment.newInstance());
-        }
+    private void initView(View view) {
 
     }
 

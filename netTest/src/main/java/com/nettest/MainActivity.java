@@ -159,7 +159,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, ContentProviderActivity.class));
                 break;
             case R.id.btn_testWebView: // 测试WebView加载纯html代码
-                startActivity(new Intent(this, WebViewActivity.class));
+                Intent intent = new Intent(this, WebViewActivity.class);
+                startActivity(intent);
+
                 break;
             default:
                 break;

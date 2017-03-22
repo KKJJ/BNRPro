@@ -15,5 +15,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="first_toolbar_title">王者荣耀掌游宝</string>
     <string name="press_again_exit">再按一次退出应用</string>
+    <string name="news_content_title">掌游宝资讯</string>
+    <string name="operation_collect">收藏</string>
+    <string name="operation_share">分享</string>
+    <string name="operation_refresh">刷新</string>
+    <string name="check_friends">点击登录后，才可查看好友喔！</string>
 
 </resources>

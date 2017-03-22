@@ -1,17 +1,27 @@
 package com.jkdev.wzryzhangyb.ui.fragment.first;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.jkdev.wzryzhangyb.R;
 import com.jkdev.wzryzhangyb.bean.NewsBean;
 import com.jkdev.wzryzhangyb.net.NetworkClient;
+import com.jkdev.wzryzhangyb.utils.DeviceUtils;
 import com.jkdev.wzryzhangyb.utils.LogUtil;
 import com.jkdev.wzryzhangyb.utils.TimeUtils;
 
@@ -26,7 +36,7 @@ import retrofit2.Response;
  * Created by KJ on 2017/3/20.
  */
 
-public class NewsContentFragment extends SupportFragment {
+public class NewsContentFragment extends SupportFragment implements View.OnClickListener {
 
     private static final String TAG = "--NewsContentFragment";
     private static final String NEWS_ID = "NEWS_ID";
@@ -35,7 +45,22 @@ public class NewsContentFragment extends SupportFragment {
     private NetworkClient mNetworkClient;
     private Gson mGson;
     private String newsId;
+
+    // 标题栏
+    private LinearLayout llActionRoot;
+    private ImageView btnImageBack;
+    private ImageView btnImageOption;
+    private TextView tvActionTitle;
+
+    // 正文
+    private TextView tvTitle;
+    private TextView tvAuthor;
+    private TextView tvTime;
     private WebView mWebView;
+
+    private TextView tvGoodCount; // 点赞数
+    private TextView tvDownCount; // down数
+    private TextView tvCommentCount; // 评论数
 
 
     public static NewsContentFragment getInstance(String id) {
@@ -58,6 +83,24 @@ public class NewsContentFragment extends SupportFragment {
 
     private void initView(View view) {
         newsId = getArguments().getString(NEWS_ID);
+
+        llActionRoot = (LinearLayout) view.findViewById(R.id.include); // 此处要用include布局的id，因为在include中再指定id的时候会将原来根布局的id替代
+        btnImageBack = (ImageView) view.findViewById(R.id.img_action_back);
+        btnImageOption = (ImageView) view.findViewById(R.id.img_action_setting);
+        tvActionTitle = (TextView) view.findViewById(R.id.tv_action_title);
+
+        tvActionTitle.setText(R.string.news_content_title);
+        btnImageBack.setOnClickListener(this);
+        btnImageOption.setOnClickListener(this);
+        btnImageOption.setImageDrawable(getResources().getDrawable(R.drawable.btn_more_selector));
+
+        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        tvAuthor = (TextView) view.findViewById(R.id.tv_author);
+        tvTime = (TextView) view.findViewById(R.id.tv_time);
+
+        tvGoodCount = (TextView) view.findViewById(R.id.tv_good_count);
+        tvDownCount = (TextView) view.findViewById(R.id.tv_down_count);
+        tvCommentCount = (TextView) view.findViewById(R.id.tv_comment);
 
         mWebView = (WebView) view.findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(true); // 启用js
@@ -82,12 +125,25 @@ public class NewsContentFragment extends SupportFragment {
             public void onResponse(Call<String> call, Response<String> response) {
                 String responseData = response.body().toString();
                 NewsBean.DataEntity data = mGson.fromJson(responseData, NewsBean.class).getData();
+                LogUtil.d(TAG, "getNewFromNet onResponse: " + data.toString());
 
                 String title = data.getTitle();
                 String author = data.getAuthor();
-                String publish_time = TimeUtils.millisToStringDate(Integer.parseInt(data.getPublish_time()), "yyyy-MM-dd HH:mm");
+                String publish_time = TimeUtils.millisToStringDate(data.getPublish_time());
                 String cover_url = data.getCover_url();
                 String content = data.getContent();
+
+                String comment_count = data.getComment_count() + "";
+                String good_count = data.getGood_count();
+                String down_count = data.getDown_count();
+
+                tvTitle.setText(title);
+                tvAuthor.setText(author);
+                tvTime.setText(publish_time);
+
+                tvCommentCount.setText(comment_count);
+                tvGoodCount.setText(good_count);
+                tvDownCount.setText(down_count);
 
                 if (data.getVideos() != null) {
                     if (data.getVideos().size() == 0) { // 说明是非视频类型，即要将src 和 data-src值互换，否则不换
@@ -101,7 +157,7 @@ public class NewsContentFragment extends SupportFragment {
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-
+                LogUtil.e(TAG, "getNewFromNet onFailure: " + t.getMessage());
             }
         });
     }
@@ -117,8 +173,100 @@ public class NewsContentFragment extends SupportFragment {
         htmlData = htmlData.replace("data-src=", "replaceData=");
         htmlData = htmlData.replace("src=", "data-src=");
         htmlData = htmlData.replace("replaceData=", "src=");
-        LogUtil.e(TAG, "onCreate: " + htmlData);
+
         return htmlData;
     }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.img_action_back:
+                pop();
+                break;
+            case R.id.img_action_setting:
+//                showPopMenu();
+                showPopWindow();
+                break;
+            case R.id.ll_operation_collect:
+                Toast.makeText(_mActivity, R.string.operation_collect, Toast.LENGTH_SHORT).show();
+                dismissPopWindow();
+                break;
+            case R.id.ll_operation_share:
+                Toast.makeText(_mActivity, R.string.operation_share, Toast.LENGTH_SHORT).show();
+                dismissPopWindow();
+                break;
+            case R.id.ll_operation_refresh:
+                Toast.makeText(_mActivity, R.string.operation_refresh, Toast.LENGTH_SHORT).show();
+                dismissPopWindow();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private PopupWindow popupWindow;
+
+    private void dismissPopWindow() {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            popupWindow.dismiss();
+        }
+    }
+
+    private void showPopWindow() {
+        View popView = LayoutInflater.from(_mActivity).inflate(R.layout.popup_window_layout, null);
+        popupWindow = new PopupWindow(popView, DeviceUtils.dip2px(180),
+                LinearLayout.LayoutParams.WRAP_CONTENT, true);
+
+        LinearLayout llOperationCollect = (LinearLayout) popView.findViewById(R.id.ll_operation_collect);
+        LinearLayout llOperationShare = (LinearLayout) popView.findViewById(R.id.ll_operation_share);
+        LinearLayout llOperationRefresh = (LinearLayout) popView.findViewById(R.id.ll_operation_refresh);
+
+        llOperationCollect.setOnClickListener(this);
+        llOperationShare.setOnClickListener(this);
+        llOperationRefresh.setOnClickListener(this);
+
+        // //设置这2个使得点击pop以外区域可以去除pop
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+
+        // 出现在父布局底端
+//        popupWindow.showAtLocation(llOperationCollect, Gravity.TOP, 0, 0);
+
+        Log.e(TAG, "showPopWindow: " + (llActionRoot == null));
+        Log.e(TAG, "showPopWindow: " + (btnImageOption == null));
+        popupWindow.showAsDropDown(btnImageOption, 40,  // x 轴方向偏移没作用 why
+                (llActionRoot.getHeight() - btnImageOption.getHeight()) / 2);
+    }
+
+    /**
+     * 显示菜单
+     */
+    private void showPopMenu() {
+        PopupMenu popupMenu = new PopupMenu(getContext(), btnImageOption);
+
+        _mActivity.getMenuInflater().inflate(R.menu.more_operation, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.operation_collect:
+                        Toast.makeText(_mActivity, R.string.operation_collect, Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.operation_share:
+                        Toast.makeText(_mActivity, R.string.operation_share, Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.operation_refresh:
+                        Toast.makeText(_mActivity, R.string.operation_refresh, Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
+    }
+
 
 }

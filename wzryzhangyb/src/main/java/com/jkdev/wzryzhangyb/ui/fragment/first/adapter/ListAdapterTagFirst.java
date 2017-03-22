@@ -28,7 +28,7 @@ public class ListAdapterTagFirst extends CommonAdapter<RecommendListDataBean.Dat
     @Override
     protected void convert(ViewHolder holder, RecommendListDataBean.DataEntity data, int position) {
 
-        holder.setText(R.id.tv_title, data.getTitle());
+        holder.setText(R.id.tv_action_title, data.getTitle());
         String instanceWithNow = TimeUtils.getInstanceWithNow(Long.parseLong(data.getPublish_time()));
         holder.setText(R.id.tv_time, instanceWithNow);
         holder.setText(R.id.tv_comment, data.getComment_count() + "评");

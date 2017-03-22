@@ -32,6 +32,18 @@ public class NetConstant {
      * 消息tab -- 消息列表
      */
     public static final String messagegroup_list = "messagegroup.list";
+    /**
+     * 广场tab -- 热门
+     */
+    public static final String square_hot_list = "dynamic.getsquarehotlist";
+    /**
+     * 广场tab -- 此刻
+     */
+    public static final String current_list = "dynamic.getcurrentlist";
+    /**
+     * 广场tab -- 关注
+     */
+    public static final String commend_list = "dynamic.getsquarerecommendlist";
 
 
     /**

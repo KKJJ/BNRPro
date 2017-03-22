@@ -1,7 +1,6 @@
 package com.jkdev.wzryzhangyb.ui.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.ViewCompat;
@@ -12,6 +11,8 @@ import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
+
+import com.jkdev.wzryzhangyb.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,8 @@ public class BottomBar extends LinearLayout {
 //        addView(shadowView, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         mTabLayout = new LinearLayout(context);
-        mTabLayout.setBackgroundColor(Color.WHITE);
+//        mTabLayout.setBackgroundColor(Color.WHITE);
+        mTabLayout.setBackgroundResource(R.drawable.main_tab_bac); // 设置成自己需要的图片或背景
         mTabLayout.setOrientation(LinearLayout.HORIZONTAL);
         addView(mTabLayout, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 

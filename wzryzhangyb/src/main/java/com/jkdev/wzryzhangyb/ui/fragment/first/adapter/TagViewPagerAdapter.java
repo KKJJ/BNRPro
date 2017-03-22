@@ -16,7 +16,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 public class TagViewPagerAdapter extends FragmentPagerAdapter {
 
-    List<SupportFragment> fragments;
+    private List<SupportFragment> fragments;
 
     public TagViewPagerAdapter(FragmentManager fm, List<SupportFragment> fms) {
         super(fm);

@@ -56,7 +56,22 @@ public class TimeUtils {
     public static String millisToStringDate(long millis, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern,
                 Locale.getDefault());
-        return format.format(new Date(millis));
+        return format.format(new Date(millis * 1000)); // 秒转成毫秒再计算
     }
+
+    /**
+     * 传入秒级时间戳 得到指定格式的时间字符串
+     */
+    public static String millisToStringDate(long millis) {
+        return TimeUtils.millisToStringDate(millis, "yyyy-MM-dd HH:mm");
+    }
+
+    /**
+     * 传入秒级时间戳 得到指定格式的时间字符串
+     */
+    public static String millisToStringDate(String millis) {
+        return TimeUtils.millisToStringDate(Integer.parseInt(millis), "yyyy-MM-dd HH:mm");
+    }
+
 
 }

@@ -43,7 +43,7 @@ public class SearchFragment extends SupportFragment {
     }
 
     private void initView(View view) {
-        btnImageBack = (ImageView) view.findViewById(R.id.img_back);
+        btnImageBack = (ImageView) view.findViewById(R.id.img_action_back);
         btnImageView = (ImageView) view.findViewById(R.id.img_search);
         etSearch = (EditText) view.findViewById(R.id.et_search);
         etSearch.setFocusable(true);

@@ -27,13 +27,13 @@ public class WebViewActivity extends AppCompatActivity {
 //            mWebView.loadData(URLEncoder.encode(webData, encoding), mimeType, encoding); // 不支持图片
 
         // 原内容img src经过base64编码，不能显示 ，此处将其转换为原始图片地址
-//        htmlDataImg = replaceDataSrc(htmlDataImg);  // 图片展示类型
-//        mWebView.loadDataWithBaseURL(null, htmlDataImg, mimeType, encoding, null);
+        htmlDataImg = replaceDataSrc(htmlDataImg);  // 图片展示类型
+        mWebView.loadDataWithBaseURL(null, htmlDataImg, mimeType, encoding, null);
 
 
 //        htmlDataVideo = replaceDataSrc(htmlDataVideo);  // 视频类型
 //        content = content.replace("src=\"data:image/gif;base64", "src=\"" + cover_url + "\" aaa=\"data:image/gif;base64");
-        mWebView.loadDataWithBaseURL(null, htmlDataVideo, mimeType, encoding, null);
+//        mWebView.loadDataWithBaseURL(null, htmlDataVideo, mimeType, encoding, null);
 
     }
 
