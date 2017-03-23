@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="90dp"
-    android:background="@drawable/item_selector"
-    android:padding="@dimen/list_item_padding">
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@drawable/item_selector"
+                android:padding="@dimen/list_item_padding">
 
     <FrameLayout
         android:id="@+id/fl"
@@ -18,14 +18,14 @@
             android:layout_width="110dp"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/tag1_img_example" />
+            android:src="@drawable/tag1_img_example"/>
 
         <ImageView
             android:id="@+id/img_pic_cover"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            android:src="@drawable/video_recommend" />
+            android:src="@drawable/video_recommend"/>
     </FrameLayout>
 
 
@@ -38,7 +38,7 @@
         android:lineSpacingExtra="2dp"
         android:text="这是title"
         android:textColor="@color/color_title1"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
             android:layout_marginRight="@dimen/list_item_padding"
-            android:src="@drawable/zhiding" />
+            android:src="@drawable/zhiding"/>
 
         <TextView
             android:id="@+id/tv_time"
@@ -65,7 +65,7 @@
             android:layout_weight="1"
             android:text="time"
             android:textColor="@color/color_title_3"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
 
         <TextView
             android:id="@+id/tv_comment"
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:text="comment"
             android:textColor="@color/color_title_3"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
 
     </LinearLayout>
 

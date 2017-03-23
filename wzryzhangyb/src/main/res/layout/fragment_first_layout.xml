@@ -29,7 +29,7 @@
             android:layout_weight="1"
             android:text="王者荣耀掌游宝"
             android:textColor="@color/actionbar_text_color"
-            android:textSize="24sp"/>
+            android:textSize="20sp"/>
 
         <ImageView
             android:id="@+id/btn_search_tag_first"

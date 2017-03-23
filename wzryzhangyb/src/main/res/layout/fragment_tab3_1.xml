@@ -8,6 +8,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view_square_hot"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="#EEEEEE"/>
 
 </LinearLayout>

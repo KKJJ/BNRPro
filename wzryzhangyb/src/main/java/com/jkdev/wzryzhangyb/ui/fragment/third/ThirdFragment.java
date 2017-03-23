@@ -73,6 +73,8 @@ public class ThirdFragment extends SupportFragment implements View.OnClickListen
         mFragments.add(ThirdTab2Fragment.newInstance());
         mFragments.add(ThirdTab3Fragment.newInstance());
 
+        LogUtil.d(TAG, "initView: " + " new Third Fragment");
+
         initViewPager();
     }
 
@@ -82,7 +84,7 @@ public class ThirdFragment extends SupportFragment implements View.OnClickListen
                 // 大坑啊，应该用[getChildFragmentManager] 之前用getFragmentManager页面一直空白
                 new ViewPagerFragmentAdapter(getChildFragmentManager(), mFragments);
         mViewPager.setAdapter(fragmentAdapter);
-        mViewPager.setOffscreenPageLimit(0);
+        mViewPager.setOffscreenPageLimit(2); /////////////////// 可以动态设置 达到目的
         selectTab(TAB_ONE); // 初始设置Tab1为选中
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -107,13 +109,13 @@ public class ThirdFragment extends SupportFragment implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_tab_hot:
-                mViewPager.setCurrentItem(TAB_ONE); // 选择viewPageer
+                mViewPager.setCurrentItem(TAB_ONE, false); // 选择viewPageer
                 break;
             case R.id.tv_tab_now:
-                mViewPager.setCurrentItem(TAB_TWO);
+                mViewPager.setCurrentItem(TAB_TWO, false);
                 break;
             case R.id.tv_tab_attention:
-                mViewPager.setCurrentItem(TAB_THIRD);
+                mViewPager.setCurrentItem(TAB_THIRD, false);
                 break;
             case R.id.img_send_tag4:
                 Toast.makeText(_mActivity, "Send", Toast.LENGTH_SHORT).show();

@@ -154,7 +154,7 @@ public class TagFragmentOther extends SupportFragment {
      */
     private void initRvAdapter() {
 
-        Log.d(TAG, "setRvAdapter: 组装adapter");
+        Log.d(TAG, "initRvAdapter: 组装adapter");
         mCommonAdapter = new ListAdapterTagFirst(getContext(), R.layout.list_item_tag_first, mDataList);
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(mCommonAdapter);
         mHeaderAndFooterWrapper.addHeaderView(mHeaderView); // 头部
@@ -170,7 +170,7 @@ public class TagFragmentOther extends SupportFragment {
      * 刷新列表数据
      */
     private void notifyRvAdapter() {
-        Log.d(TAG, "setRvAdapter: 刷新数据");
+        Log.d(TAG, "notifyRvAdapter: 刷新数据");
         mLoadMoreWrapper.notifyDataSetChanged();
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);

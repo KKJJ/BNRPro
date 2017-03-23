@@ -128,7 +128,7 @@ public class NetworkClient {
      *
      * @param callback
      */
-    public void getCurrentList(Callback callback) {
+    public void getSquareCurrentList(Callback callback) {
         Map<String, String> param = new HashMap();
         param.put("params[dynamicTopicId]", "0");
         param.put("params[gender]", "0");
@@ -143,7 +143,7 @@ public class NetworkClient {
      *
      * @param callback
      */
-    public void getCommendList(Callback callback) {
+    public void getSquareCommendList(Callback callback) {
         Map<String, String> param = new HashMap();
         param.put("params[dynamicTopicId]", "0");
         param.put("params[gender]", "0");

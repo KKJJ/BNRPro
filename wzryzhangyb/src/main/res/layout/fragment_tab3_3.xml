@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="TAB 3_3"
+        android:text="TAB 3\n你关注的东西"
         android:textColor="@color/color_top_tab_title"
         android:textSize="24sp"/>
 

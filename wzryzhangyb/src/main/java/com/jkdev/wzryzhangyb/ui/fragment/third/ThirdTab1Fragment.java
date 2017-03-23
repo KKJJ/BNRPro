@@ -36,7 +36,6 @@ public class ThirdTab1Fragment extends SupportFragment {
     private NetworkClient mNetworkClient;
     private Gson mGson;
 
-
     public static ThirdTab1Fragment newInstance() {
 
         ThirdTab1Fragment fragment = new ThirdTab1Fragment();
@@ -80,7 +79,6 @@ public class ThirdTab1Fragment extends SupportFragment {
                 List<SquareListBean.DataBean> beanList = mGson.fromJson(response.body(), SquareListBean.class).getData();
 
                 notifyRvAdapter(beanList); // 刷新数据
-
             }
 
             @Override
