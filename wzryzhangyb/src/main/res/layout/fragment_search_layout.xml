@@ -42,9 +42,26 @@
 
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/color_white"/>
+        android:layout_height="match_parent">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_white"
+            />
+
+        <TextView
+            android:id="@+id/tv_no_data"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="没有找到相关资讯哦"
+            android:textColor="@color/color_title_3"
+            android:textSize="16sp"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 </LinearLayout>

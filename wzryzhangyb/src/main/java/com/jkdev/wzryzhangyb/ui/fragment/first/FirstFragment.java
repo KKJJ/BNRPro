@@ -108,11 +108,11 @@ public class FirstFragment extends SupportFragment {
     private void initTagData() {
         TagListBean tagListBean = new Gson().fromJson(NetConstant.tag_list_data, TagListBean.class);
         mTagList = tagListBean.getData();
-        supportFragments.add(TagFragmentFirst.newInstance());
-        for (int i = 0; i < mTagList.size() - 1; i++) {
+//        supportFragments.add(TagFragmentFirst.newInstance());
+        for (int i = 0; i < mTagList.size(); i++) {
             supportFragments.add(TagFragmentOther.newInstance(i));
         }
-        mViewPager.setOffscreenPageLimit(0); // 取消预加载没起作用
+        mViewPager.setOffscreenPageLimit(5); // 取消预加载没起作用
         mViewPager.setAdapter(adapter);
 
         magicIndicator.getNavigator().notifyDataSetChanged();

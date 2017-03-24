@@ -169,7 +169,8 @@ public class SecondFragment extends SupportFragment {
             dataList1.add(new TabFindBean(imgs1[i], titles1[i]));
         }
         mRecycleView1.setLayoutManager(new GridLayoutManager(_mActivity, 3));
-        PubAdapter pubAdapter1 = new PubAdapter(_mActivity, R.layout.list_item_tab_find_1, dataList1);
+        PubAdapter pubAdapter1 = new PubAdapter(_mActivity,
+                R.layout.list_item_tab_find_1, dataList1);
         mRecycleView1.setAdapter(pubAdapter1);
         pubAdapter1.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override

@@ -19,12 +19,12 @@
     <style name="divier_thin">
         <item name="android:background">@color/l_2</item>
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">0.5dip</item>
+        <item name="android:layout_height">0.3dip</item>
     </style>
 
     <style name="divier_thin2">
         <item name="android:background">@color/l_2</item>
-        <item name="android:layout_width">0.5dip</item>
+        <item name="android:layout_width">0.3dip</item>
         <item name="android:layout_height">fill_parent</item>
     </style>
 

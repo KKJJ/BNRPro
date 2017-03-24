@@ -153,5 +153,19 @@ public class NetworkClient {
         requestData(NetConstant.commend_list, param, callback);
     }
 
+    /**
+     * 首页 搜索
+     *
+     * @param keyWord  : 要搜索的关键字
+     * @param callback
+     */
+    public void topicSearch(String keyWord, Callback callback) {
+        Map<String, String> param = new HashMap();
+        param.put("params[last_id]", "0");
+        param.put("params[keyword]", keyWord);
+
+        requestData(NetConstant.topic_search, param, callback);
+    }
+
 
 }

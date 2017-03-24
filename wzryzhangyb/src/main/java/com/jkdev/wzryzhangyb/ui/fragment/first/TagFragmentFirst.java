@@ -70,7 +70,15 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
     private SharePreferenceUtil mSharePreferenceUtil;
 
     private AdListAdapter mAdListAdapter; // 轮播图Adapter
-    private boolean needToLoad = true; // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下 这是是否刷新标志
+    private boolean mNeedToLoad = false; // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下 这是是否刷新标志
+
+    public boolean isNeedToLoad() {
+        return mNeedToLoad;
+    }
+
+    public void setNeedToLoad(boolean needToLoad) {
+        mNeedToLoad = needToLoad;
+    }
 
     public static TagFragmentFirst newInstance() {
         TagFragmentFirst fragment = new TagFragmentFirst();
@@ -98,6 +106,8 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
 
         initHeaderView(); // 初始头部
         initRecommendRecycleView(view); // 初始列表数据
+
+        //
 
     }
 
@@ -138,7 +148,7 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
                 String responseData = response.body().toString();
                 mSharePreferenceUtil.setRecommendListData(responseData); // 缓存本地
                 dataList.clear(); // 先清空数据
-                needToLoad = true; // 刷新后置为true
+//               setNeedToLoad(true); // 刷新后置为true
                 List<RecommendListDataBean.DataEntity> netDataList = mGson.fromJson(responseData, RecommendListDataBean.class).getData();
                 dataList.addAll(netDataList); //
                 notifyRvAdapter();
@@ -218,9 +228,9 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (needToLoad && mAdListAdapter != null) {
+                if (isNeedToLoad() && mAdListAdapter != null) {
                     mAdListAdapter.notifyDataSetChanged(); // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下
-                    needToLoad = false;
+                    setNeedToLoad(false);
                 }
             }
 
@@ -258,14 +268,15 @@ public class TagFragmentFirst extends SupportFragment implements View.OnClickLis
         mRollPagerView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if (position == 4) { ////////////////////////////////////////
-                    Toast.makeText(_mActivity, "这个还没做", Toast.LENGTH_SHORT).show();
+                AdListDataBean.DataEntity.ListEntity entity = adList.get(position);
+                if (!entity.getRedirect_type().endsWith("3")) { //只做了类型为3的跳转
+                    Toast.makeText(_mActivity, "type为" + entity.getRedirect_type() + "，这个还没做", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 EventBus.getDefault().post(
                         new StartBrotherEvent(
                                 NewsContentFragment.getInstance(
-                                        adList.get(position).getRedirect_data()))); //
+                                        entity.getRedirect_data()))); //
             }
         });
         mImageViewFour1.setOnClickListener(this);

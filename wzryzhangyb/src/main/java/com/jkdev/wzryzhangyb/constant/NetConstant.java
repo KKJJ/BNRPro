@@ -27,6 +27,10 @@ public class NetConstant {
      * 首页 -- 列表数据
      */
     public static final String get_news_by_id = "news.getbyid";
+    /**
+     * 首页 -- 搜索
+     */
+    public static final String topic_search = "topic.search";
 
     /**
      * 消息tab -- 消息列表

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:background="@drawable/item_selector"
+                android:background="@drawable/item_press_selector"
                 android:padding="@dimen/list_item_padding">
 
     <FrameLayout
@@ -37,7 +37,7 @@
         android:layout_toRightOf="@id/fl"
         android:lineSpacingExtra="2dp"
         android:text="这是title"
-        android:textColor="@color/color_title1"
+        android:textColor="@color/color_title_1"
         android:textSize="16sp"/>
 
     <LinearLayout

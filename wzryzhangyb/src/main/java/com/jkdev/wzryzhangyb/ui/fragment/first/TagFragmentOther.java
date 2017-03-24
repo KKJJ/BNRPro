@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -46,11 +48,11 @@ import retrofit2.Response;
  * Created by KJ on 2017/3/20.
  */
 
-public class TagFragmentOther extends SupportFragment {
+public class TagFragmentOther extends SupportFragment implements View.OnClickListener {
 
     private static final String TAG = "--TagFragmentOther";
     private static final String TAG_ID = "TAG_ID";
-    private int tagIdFlag;
+    //    private int tagIdFlag;
     private RollPagerView mRollPagerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -59,16 +61,30 @@ public class TagFragmentOther extends SupportFragment {
     private LoadMoreWrapper mLoadMoreWrapper;
     private View mHeaderView;
     private View mLoadMoreView;
+
+    private LinearLayout llRoot;
+    private ImageView mImageViewFour1;
+    private ImageView mImageViewFour2;
+    private ImageView mImageViewFour3;
+    private ImageView mImageViewFour4;
+
     private List<RecommendListDataBean.DataEntity> mDataList;
     private List<AdListDataBean.DataEntity.ListEntity> mAdList;
     private NetworkClient mNetworkClient;
     private Gson mGson;
     private SharePreferenceUtil mSharePreferenceUtil;
-    private int[] mTagIds = {5, 4, 3, 2, 98};
+    private int[] mTagIds = {0, 5, 4, 3, 2, 98};
     private int mTagId;
     private boolean mNeedToLoad = true; // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下 这是是否刷新标志
     private AdListAdapter mAdListAdapter;
 
+    public boolean isNeedToLoad() {
+        return mNeedToLoad;
+    }
+
+    public void setNeedToLoad(boolean needToLoad) {
+        mNeedToLoad = needToLoad;
+    }
 
     public static TagFragmentOther newInstance(int tId) {
 
@@ -101,8 +117,10 @@ public class TagFragmentOther extends SupportFragment {
      */
     private void initView(View view) {
 
-        initHeaderView();
-        tagIdFlag = getArguments().getInt(TAG_ID);
+        int tagIdFlag = getArguments().getInt(TAG_ID);
+        mTagId = mTagIds[tagIdFlag];
+
+        initHeaderView(); // 初始头部布局
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -113,7 +131,6 @@ public class TagFragmentOther extends SupportFragment {
 
         initRvAdapter(); //
 
-        mTagId = mTagIds[tagIdFlag];
         String tagListDataString = mSharePreferenceUtil.getTagListData(Constants.TAG_LIST_DATA + mTagId); // 拿缓存数据
         if (TextUtils.isEmpty(tagListDataString)) { // 没本地数据 联网请求
             getTagListDataFromNet(mTagId);
@@ -136,7 +153,7 @@ public class TagFragmentOther extends SupportFragment {
                 String responseData = response.body().toString();
                 mSharePreferenceUtil.setTagListData(Constants.TAG_LIST_DATA + tagId, responseData);// 缓存本地
                 mDataList.clear(); // 先清空数据
-                mNeedToLoad = true; // 刷新后置为true
+//                setNeedToLoad(true); // 刷新后置为true
                 List<RecommendListDataBean.DataEntity> netDataList = mGson.fromJson(responseData, RecommendListDataBean.class).getData();
                 mDataList.addAll(netDataList); //
                 notifyRvAdapter();
@@ -184,7 +201,10 @@ public class TagFragmentOther extends SupportFragment {
         mCommonAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                EventBus.getDefault().post(new StartBrotherEvent(NewsContentFragment.getInstance(mDataList.get(position).getId())));
+                EventBus.getDefault().post(
+                        new StartBrotherEvent(
+                                NewsContentFragment.getInstance(
+                                        mDataList.get(position - 1).getId()))); // 因为列表有header 所以减1
             }
 
             @Override
@@ -214,9 +234,9 @@ public class TagFragmentOther extends SupportFragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if (mNeedToLoad && mAdListAdapter != null) {
+                if (mTagId == 0 && isNeedToLoad() && mAdListAdapter != null) {
                     mAdListAdapter.notifyDataSetChanged(); // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下
-                    mNeedToLoad = false;
+                    setNeedToLoad(false);
                 }
             }
 
@@ -248,16 +268,33 @@ public class TagFragmentOther extends SupportFragment {
         mRollPagerView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if (position == 4) { ////////////////////////////////////////
-                    Toast.makeText(_mActivity, "这个还没做", Toast.LENGTH_SHORT).show();
+                AdListDataBean.DataEntity.ListEntity entity = mAdList.get(position);
+                if (!entity.getRedirect_type().endsWith("3")) { //只做了类型为3的跳转
+                    Toast.makeText(_mActivity, "type为" + entity.getRedirect_type() + "，这个还没做", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 EventBus.getDefault().post(
                         new StartBrotherEvent(
                                 NewsContentFragment.getInstance(
-                                        mAdList.get(position).getRedirect_data()))); //
+                                        entity.getRedirect_data()))); //
             }
         });
+
+        llRoot = (LinearLayout) mHeaderView.findViewById(R.id.ll_root);
+        if (mTagId == 0) {
+            llRoot.setVisibility(View.VISIBLE);
+            mImageViewFour1 = (ImageView) mHeaderView.findViewById(R.id.img_four_1);
+            mImageViewFour2 = (ImageView) mHeaderView.findViewById(R.id.img_four_2);
+            mImageViewFour3 = (ImageView) mHeaderView.findViewById(R.id.img_four_3);
+            mImageViewFour4 = (ImageView) mHeaderView.findViewById(R.id.img_four_4);
+
+            mImageViewFour1.setOnClickListener(this);
+            mImageViewFour2.setOnClickListener(this);
+            mImageViewFour3.setOnClickListener(this);
+            mImageViewFour4.setOnClickListener(this);
+        } else {
+            llRoot.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -283,4 +320,23 @@ public class TagFragmentOther extends SupportFragment {
         });
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_four_1:
+                Toast.makeText(_mActivity, "1", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.img_four_2:
+                Toast.makeText(_mActivity, "2", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.img_four_3:
+                Toast.makeText(_mActivity, "3", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.img_four_4:
+                Toast.makeText(_mActivity, "4", Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+    }
 }

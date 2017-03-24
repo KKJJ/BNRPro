@@ -20,6 +20,8 @@ public class MainActivity extends SupportActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 设置只能竖屏
         setContentView(R.layout.activity_main);
 
+//        StatusBarUtil.setColor(this, R.color.actionbar_bg_color);
+
         if (savedInstanceState == null) {
             loadRootFragment(R.id.fl_main_container, MainFragment.newInstance());
         }

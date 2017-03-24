@@ -34,18 +34,36 @@ public class ListAdapterTagFirst extends CommonAdapter<RecommendListDataBean.Dat
         holder.setText(R.id.tv_comment, data.getComment_count() + "评");
         int type = Integer.parseInt(data.getSticky_type());
         if (data.getVideos() != null) {
+            // 原来先区分是不是视频，再区分是不是置顶 有问题
+            // 应该先区分是不是置顶，再区分是不是视频
+            // 最后发现要分开分别判断，而且要先判断是否是视频 再判断是否置顶
+
             if (data.getVideos().size() != 0) { // 视频类型
-                holder.setImageResource(R.id.img_type, R.drawable.video_tags);
-                Glide.with(MyApplication.getContext()).load(data.getVideos().get(0).getImage_url()).into((ImageView) holder.getView(R.id.img_pic));
                 holder.setVisible(R.id.img_pic_cover, true);
-            } else { // 非视频
-                if (type == 1) {
+                Glide.with(MyApplication.getContext()).load(data.getVideos().get(0)
+                        .getImage_url()).into((ImageView) holder.getView(R.id.img_pic));
+
+                holder.setVisible(R.id.img_type, true); // ///////必须显示
+
+//                if (type == 1 || type == 2) { // 置顶的type值为1，2
+                if (type == 0) { // 非置顶
+                    holder.setImageResource(R.id.img_type, R.drawable.video_tags);
+                } else { // 置顶
                     holder.setImageResource(R.id.img_type, R.drawable.zhiding);
-                } else {
-                    holder.setVisible(R.id.img_type, false);
                 }
-                Glide.with(MyApplication.getContext()).load(data.getRecommend_covers().get(0)).into((ImageView) holder.getView(R.id.img_pic));
+
+            } else { // 非视频类型
                 holder.setVisible(R.id.img_pic_cover, false);
+                Glide.with(MyApplication.getContext()).load(data.getRecommend_covers()
+                        .get(0)).into((ImageView) holder.getView(R.id.img_pic));
+
+//                if (type == 1 || type == 2) { // 置顶
+                if (type == 0) { // 非置顶
+                    holder.setVisible(R.id.img_type, false);
+                } else { // 置顶
+                    holder.setVisible(R.id.img_type, true);
+                    holder.setImageResource(R.id.img_type, R.drawable.zhiding);
+                }
             }
         }
     }

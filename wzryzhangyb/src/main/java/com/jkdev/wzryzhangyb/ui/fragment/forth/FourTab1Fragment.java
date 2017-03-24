@@ -90,7 +90,7 @@ public class FourTab1Fragment extends SupportFragment {
 
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
-                LogUtil.e(TAG, "onResponse" + response.body().toString());
+                LogUtil.d(TAG, "onResponse" + response.body().toString());
                 List<MessageListDataBean.DataBean> beanList = mGson.fromJson(response.body(), MessageListDataBean.class).getData();
 
                 notifyRvAdapter(beanList); // 刷新数据
