@@ -26,6 +26,8 @@ import me.yokeyword.fragmentation.SupportFragment;
  */
 public class MainFragment extends SupportFragment {
 
+    private static final String TAG = "--MainFragment";
+
     public static final int FIRST = 0;
     public static final int SECOND = 1;
     public static final int THIRD = 2;

@@ -1,9 +1,14 @@
 package com.jkdev.wzryzhangyb;
 
+import android.annotation.TargetApi;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.jaeger.library.StatusBarUtil;
 import com.jkdev.wzryzhangyb.ui.fragment.MainFragment;
 
 import me.yokeyword.fragmentation.SupportActivity;
@@ -20,15 +25,35 @@ public class MainActivity extends SupportActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); // 设置只能竖屏
         setContentView(R.layout.activity_main);
 
-//        StatusBarUtil.setColor(this, R.color.actionbar_bg_color);
+        //只对api19以上版本有效
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+        }
+        // 设置状态栏颜色
+//        StatusBarUtil.setColor(this, Color.parseColor("#ff0000"));
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.actionbar_bg_color));
 
         if (savedInstanceState == null) {
             loadRootFragment(R.id.fl_main_container, MainFragment.newInstance());
         }
     }
 
+    @TargetApi(19)
+    private void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+    }
+
     @Override
     public void onBackPressedSupport() {
+
         // 对于 4个类别的主Fragment内的回退back逻辑,已经在其onBackPressedSupport里各自处理了
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             pop();

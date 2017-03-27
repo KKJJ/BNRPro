@@ -75,7 +75,7 @@ public class TagFragmentOther extends SupportFragment implements View.OnClickLis
     private SharePreferenceUtil mSharePreferenceUtil;
     private int[] mTagIds = {0, 5, 4, 3, 2, 98};
     private int mTagId;
-    private boolean mNeedToLoad = true; // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下 这是是否刷新标志
+    private boolean mNeedToLoad = false; // 因为在第一次安装时 轮播图有时候没显示,所以滑动的时候刷新下 这是是否刷新标志
     private AdListAdapter mAdListAdapter;
 
     public boolean isNeedToLoad() {

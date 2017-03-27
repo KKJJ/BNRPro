@@ -227,7 +227,7 @@ public class NewsBean {
         private String share_url;
         private int userLogoFrameId;
         private List<?> image_urls;
-        private List<?> videos;
+        private List<VideosBean> videos;
 
         public String getId() {
             return id;
@@ -533,11 +533,11 @@ public class NewsBean {
             this.image_urls = image_urls;
         }
 
-        public List<?> getVideos() {
+        public List<VideosBean> getVideos() {
             return videos;
         }
 
-        public void setVideos(List<?> videos) {
+        public void setVideos(List<VideosBean> videos) {
             this.videos = videos;
         }
 
@@ -606,5 +606,364 @@ public class NewsBean {
                 this.certification_describes = certification_describes;
             }
         }
+
+        public static class VideosBean {
+
+
+            /**
+             * id : 4327
+             * iframe_height : 400
+             * iframe_src : http://www.bilibili.com/video/av9353327/?from=search&seid=12625368896553444185
+             * iframe_width : 480
+             * image_url : http://avatar.zhangyoubao.com/yxzj/video_cover/2e2/495/2a3/bad3l7Ovm.jpg
+             * is_live : 0
+             * last_parse_time : 1490436787
+             * source_site : 未知
+             * source_url : http://www.bilibili.com/video/av9353327/?from=search&seid=12625368896553444185
+             * title : 【王者荣耀欢乐吐槽】《煌段子峡谷》第四期
+             * video_height : 210
+             * video_length : 341.00
+             * video_sizes : {"hd":51600272,"multi_mp4_hd":154800816,"multi_mp4_sd":0,"multi_mp4_shd":0,"sd":24443109,"shd":0}
+             * video_type : m3u8
+             * video_urls : {"hd":"","multi_mp4_hd":[{"bytes":51600272,"no":0,"seconds":341,"type":"mp4","url":"http://cn-hbcd-cu-v-05.acgvideo.com/vg1/9/96/15457077-1-hd.mp4?expires=1490360100&platform=pc&ssig=rdLq49H4bM8XmPP61kpaVQ&oi=1992174840&nfa=cBb9LpM4vzCHtlWJ7C8l1g==&dynamic=1"},{"bytes":51600272,"no":0,"seconds":341,"type":"mp4","url":"http://cn-zjwz-cu-v-01.acgvideo.com/vg7/7/f3/15457077-1.mp4?expires=1490360100&platform=pc&ssig=WI6DpkwcjwtAM_npcGwGvw&oi=1992174840&nfa=cBb9LpM4vzCHtlWJ7C8l1g==&dynamic=1"},{"bytes":51600272,"no":0,"seconds":341,"type":"mp4","url":"http://ws.acgvideo.com/f/f3/15457077-1-hd.mp4?wsTime=1490360356&platform=pc&wsSecret2=d5bcf5bb480e42d0971341e1c6cb808e&oi=1992174840&rate=5"}],"multi_mp4_sd":[],"multi_mp4_shd":[],"sd":"http://cn-zjwz-cu-v-01.acgvideo.com/vg7/7/f3/15457077-1.mp4?expires=1490447400&platform=pc&ssig=4M4O5s899yjCyqCdknGYzA&oi=1992174503&nfa=cBb9LpM4vzCHtlWJ7C8l1g==&dynamic=1","shd":""}
+             * video_width : 308
+             */
+
+            private String id;
+            private String iframe_height;
+            private String iframe_src;
+            private String iframe_width;
+            private String image_url;
+            private String is_live;
+            private String last_parse_time;
+            private String source_site;
+            private String source_url;
+            private String title;
+            private String video_height;
+            private String video_length;
+            private VideoSizesEntity video_sizes;
+            private String video_type;
+            private VideoUrlsEntity video_urls;
+            private String video_width;
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getIframe_height() {
+                return iframe_height;
+            }
+
+            public void setIframe_height(String iframe_height) {
+                this.iframe_height = iframe_height;
+            }
+
+            public String getIframe_src() {
+                return iframe_src;
+            }
+
+            public void setIframe_src(String iframe_src) {
+                this.iframe_src = iframe_src;
+            }
+
+            public String getIframe_width() {
+                return iframe_width;
+            }
+
+            public void setIframe_width(String iframe_width) {
+                this.iframe_width = iframe_width;
+            }
+
+            public String getImage_url() {
+                return image_url;
+            }
+
+            public void setImage_url(String image_url) {
+                this.image_url = image_url;
+            }
+
+            public String getIs_live() {
+                return is_live;
+            }
+
+            public void setIs_live(String is_live) {
+                this.is_live = is_live;
+            }
+
+            public String getLast_parse_time() {
+                return last_parse_time;
+            }
+
+            public void setLast_parse_time(String last_parse_time) {
+                this.last_parse_time = last_parse_time;
+            }
+
+            public String getSource_site() {
+                return source_site;
+            }
+
+            public void setSource_site(String source_site) {
+                this.source_site = source_site;
+            }
+
+            public String getSource_url() {
+                return source_url;
+            }
+
+            public void setSource_url(String source_url) {
+                this.source_url = source_url;
+            }
+
+            public String getTitle() {
+                return title;
+            }
+
+            public void setTitle(String title) {
+                this.title = title;
+            }
+
+            public String getVideo_height() {
+                return video_height;
+            }
+
+            public void setVideo_height(String video_height) {
+                this.video_height = video_height;
+            }
+
+            public String getVideo_length() {
+                return video_length;
+            }
+
+            public void setVideo_length(String video_length) {
+                this.video_length = video_length;
+            }
+
+            public VideoSizesEntity getVideo_sizes() {
+                return video_sizes;
+            }
+
+            public void setVideo_sizes(VideoSizesEntity video_sizes) {
+                this.video_sizes = video_sizes;
+            }
+
+            public String getVideo_type() {
+                return video_type;
+            }
+
+            public void setVideo_type(String video_type) {
+                this.video_type = video_type;
+            }
+
+            public VideoUrlsEntity getVideo_urls() {
+                return video_urls;
+            }
+
+            public void setVideo_urls(VideoUrlsEntity video_urls) {
+                this.video_urls = video_urls;
+            }
+
+            public String getVideo_width() {
+                return video_width;
+            }
+
+            public void setVideo_width(String video_width) {
+                this.video_width = video_width;
+            }
+
+            public static class VideoSizesEntity {
+                /**
+                 * hd : 51600272
+                 * multi_mp4_hd : 154800816
+                 * multi_mp4_sd : 0
+                 * multi_mp4_shd : 0
+                 * sd : 24443109
+                 * shd : 0
+                 */
+
+                private int hd;
+                private int multi_mp4_hd;
+                private int multi_mp4_sd;
+                private int multi_mp4_shd;
+                private int sd;
+                private int shd;
+
+                public int getHd() {
+                    return hd;
+                }
+
+                public void setHd(int hd) {
+                    this.hd = hd;
+                }
+
+                public int getMulti_mp4_hd() {
+                    return multi_mp4_hd;
+                }
+
+                public void setMulti_mp4_hd(int multi_mp4_hd) {
+                    this.multi_mp4_hd = multi_mp4_hd;
+                }
+
+                public int getMulti_mp4_sd() {
+                    return multi_mp4_sd;
+                }
+
+                public void setMulti_mp4_sd(int multi_mp4_sd) {
+                    this.multi_mp4_sd = multi_mp4_sd;
+                }
+
+                public int getMulti_mp4_shd() {
+                    return multi_mp4_shd;
+                }
+
+                public void setMulti_mp4_shd(int multi_mp4_shd) {
+                    this.multi_mp4_shd = multi_mp4_shd;
+                }
+
+                public int getSd() {
+                    return sd;
+                }
+
+                public void setSd(int sd) {
+                    this.sd = sd;
+                }
+
+                public int getShd() {
+                    return shd;
+                }
+
+                public void setShd(int shd) {
+                    this.shd = shd;
+                }
+            }
+
+            public static class VideoUrlsEntity {
+                /**
+                 * hd :
+                 * multi_mp4_hd : [{"bytes":51600272,"no":0,"seconds":341,"type":"mp4","url":"http://cn-hbcd-cu-v-05.acgvideo.com/vg1/9/96/15457077-1-hd.mp4?expires=1490360100&platform=pc&ssig=rdLq49H4bM8XmPP61kpaVQ&oi=1992174840&nfa=cBb9LpM4vzCHtlWJ7C8l1g==&dynamic=1"},{"bytes":51600272,"no":0,"seconds":341,"type":"mp4","url":"http://cn-zjwz-cu-v-01.acgvideo.com/vg7/7/f3/15457077-1.mp4?expires=1490360100&platform=pc&ssig=WI6DpkwcjwtAM_npcGwGvw&oi=1992174840&nfa=cBb9LpM4vzCHtlWJ7C8l1g==&dynamic=1"},{"bytes":51600272,"no":0,"seconds":341,"type":"mp4","url":"http://ws.acgvideo.com/f/f3/15457077-1-hd.mp4?wsTime=1490360356&platform=pc&wsSecret2=d5bcf5bb480e42d0971341e1c6cb808e&oi=1992174840&rate=5"}]
+                 * multi_mp4_sd : []
+                 * multi_mp4_shd : []
+                 * sd : http://cn-zjwz-cu-v-01.acgvideo.com/vg7/7/f3/15457077-1.mp4?expires=1490447400&platform=pc&ssig=4M4O5s899yjCyqCdknGYzA&oi=1992174503&nfa=cBb9LpM4vzCHtlWJ7C8l1g==&dynamic=1
+                 * shd :
+                 */
+
+                private String hd;
+                private String sd;
+                private String shd;
+                private List<MultiMp4HdEntity> multi_mp4_hd;
+                private List<?> multi_mp4_sd;
+                private List<?> multi_mp4_shd;
+
+                public String getHd() {
+                    return hd;
+                }
+
+                public void setHd(String hd) {
+                    this.hd = hd;
+                }
+
+                public String getSd() {
+                    return sd;
+                }
+
+                public void setSd(String sd) {
+                    this.sd = sd;
+                }
+
+                public String getShd() {
+                    return shd;
+                }
+
+                public void setShd(String shd) {
+                    this.shd = shd;
+                }
+
+                public List<MultiMp4HdEntity> getMulti_mp4_hd() {
+                    return multi_mp4_hd;
+                }
+
+                public void setMulti_mp4_hd(List<MultiMp4HdEntity> multi_mp4_hd) {
+                    this.multi_mp4_hd = multi_mp4_hd;
+                }
+
+                public List<?> getMulti_mp4_sd() {
+                    return multi_mp4_sd;
+                }
+
+                public void setMulti_mp4_sd(List<?> multi_mp4_sd) {
+                    this.multi_mp4_sd = multi_mp4_sd;
+                }
+
+                public List<?> getMulti_mp4_shd() {
+                    return multi_mp4_shd;
+                }
+
+                public void setMulti_mp4_shd(List<?> multi_mp4_shd) {
+                    this.multi_mp4_shd = multi_mp4_shd;
+                }
+
+                public static class MultiMp4HdEntity {
+                    /**
+                     * bytes : 51600272
+                     * no : 0
+                     * seconds : 341
+                     * type : mp4
+                     * url : http://cn-hbcd-cu-v-05.acgvideo.com/vg1/9/96/15457077-1-hd.mp4?expires=1490360100&platform=pc&ssig=rdLq49H4bM8XmPP61kpaVQ&oi=1992174840&nfa=cBb9LpM4vzCHtlWJ7C8l1g==&dynamic=1
+                     */
+
+                    private int bytes;
+                    private int no;
+                    private int seconds;
+                    private String type;
+                    private String url;
+
+                    public int getBytes() {
+                        return bytes;
+                    }
+
+                    public void setBytes(int bytes) {
+                        this.bytes = bytes;
+                    }
+
+                    public int getNo() {
+                        return no;
+                    }
+
+                    public void setNo(int no) {
+                        this.no = no;
+                    }
+
+                    public int getSeconds() {
+                        return seconds;
+                    }
+
+                    public void setSeconds(int seconds) {
+                        this.seconds = seconds;
+                    }
+
+                    public String getType() {
+                        return type;
+                    }
+
+                    public void setType(String type) {
+                        this.type = type;
+                    }
+
+                    public String getUrl() {
+                        return url;
+                    }
+
+                    public void setUrl(String url) {
+                        this.url = url;
+                    }
+                }
+            }
+        }
+
     }
+
+
 }
